@@ -177,9 +177,10 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
     await supabase.from('restock_requests').upsert({
       product_id: product.id,
       colour: selectedVariant.colour,
+      size: selectedVariant.size,
       email: notifyEmail.trim().toLowerCase(),
       user_id: user?.id || null,
-    }, { onConflict: 'product_id,colour,email' })
+    }, { onConflict: 'product_id,colour,size,email' })
     setNotifySubmitted(true)
     setNotifyLoading(false)
   }
@@ -330,7 +331,7 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
 
   const handleAddToCart = () => {
     if (!selectedVariant || selectedVariant.stock === 0) return
-    addItem({ productId: product.id, productName: product.name, productSlug: product.slug, productImage: primaryImage?.url || '', colour: selectedVariant.colour, colourHex: selectedVariant.colourHex, originalPrice: product.originalPrice, salePrice: product.salePrice, quantity: qty, stock: selectedVariant.stock, gstRate: product.gstRate })
+    addItem({ productId: product.id, productName: product.name, productSlug: product.slug, productImage: primaryImage?.url || '', colour: selectedVariant.colour, colourHex: selectedVariant.colourHex, size: selectedVariant.size, originalPrice: product.originalPrice, salePrice: product.salePrice, quantity: qty, stock: selectedVariant.stock, gstRate: product.gstRate })
     setAddedToCart(true)
     toast.success(<span>{product.name} added to cart! <a href="/cart" style={{ color: 'var(--crimson)', fontWeight: 600, marginLeft: 4 }}>View Cart →</a></span>, { duration: 3500 })
     setTimeout(() => setAddedToCart(false), 2500)
