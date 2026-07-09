@@ -29,7 +29,7 @@ export default function EmberField() {
     size()
     window.addEventListener('resize', size)
 
-    const COUNT = 46
+    const COUNT = 95
     type Ember = {
       x: number; y: number; vy: number; vx: number; r: number
       baseAlpha: number; wob: number; wobSpeed: number; wobAmp: number
@@ -39,16 +39,16 @@ export default function EmberField() {
       return {
         x: Math.random() * vw,
         y: seedY !== undefined ? seedY : Math.random() * vh,
-        vy: -(0.15 + Math.random() * 0.5),
-        vx: (Math.random() - 0.5) * 0.18,
-        r: 0.6 + Math.random() * 2.3,
-        baseAlpha: 0.15 + Math.random() * 0.55,
+        vy: -(0.2 + Math.random() * 0.75),
+        vx: (Math.random() - 0.5) * 0.28,
+        r: 0.7 + Math.random() * 3.1,
+        baseAlpha: 0.25 + Math.random() * 0.65,
         wob: Math.random() * Math.PI * 2,
-        wobSpeed: 0.004 + Math.random() * 0.014,
-        wobAmp: 6 + Math.random() * 24,
+        wobSpeed: 0.005 + Math.random() * 0.018,
+        wobAmp: 8 + Math.random() * 30,
         flick: Math.random() * Math.PI * 2,
-        flickSpeed: 0.02 + Math.random() * 0.05,
-        hue: Math.random() < 0.65 ? 0 : 1,
+        flickSpeed: 0.025 + Math.random() * 0.06,
+        hue: Math.random() < 0.6 ? 0 : 1,
       }
     }
     const embers: Ember[] = Array.from({ length: COUNT }, () => makeEmber())
@@ -66,7 +66,7 @@ export default function EmberField() {
         }
         const alpha = p.baseAlpha * (0.6 + Math.sin(p.flick) * 0.4)
         const rad = p.r
-        const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 3.2)
+        const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 3.8)
         if (p.hue === 0) {
           grad.addColorStop(0, `rgba(255,225,160,${alpha.toFixed(3)})`)
           grad.addColorStop(0.4, `rgba(221,161,25,${(alpha * 0.55).toFixed(3)})`)
@@ -78,7 +78,7 @@ export default function EmberField() {
         }
         ctx!.fillStyle = grad
         ctx!.beginPath()
-        ctx!.arc(p.x, p.y, rad * 3.2, 0, Math.PI * 2)
+        ctx!.arc(p.x, p.y, rad * 3.8, 0, Math.PI * 2)
         ctx!.fill()
       })
       raf = requestAnimationFrame(tick)

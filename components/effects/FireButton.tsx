@@ -69,8 +69,8 @@ export default function FireButton({
     function tick() {
       ctx!.clearRect(0, 0, w, h)
       const isHovering = hoveringRef.current
-      const intensity = isHovering ? 1 : 0.22
-      const spawnChance = isHovering ? 1.5 : 0.35
+      const intensity = isHovering ? 1.3 : 0.32
+      const spawnChance = isHovering ? 2.1 : 0.55
       let n = spawnChance
       while (n > 0) { if (Math.random() < Math.min(n, 1)) spawn(intensity); n -= 1 }
 

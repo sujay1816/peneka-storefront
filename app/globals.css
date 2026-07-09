@@ -741,3 +741,40 @@ video {
   padding: 7px 16px;
   background: rgba(221,161,25,.05);
 }
+
+/* ---------- Brand wordmark "lightning strike" effect ---------- */
+.brand-strike-wrap { position: relative; display: inline-block; }
+.brand-strike-text {
+  animation: brandFlash 7s ease-in-out infinite;
+}
+@keyframes brandFlash {
+  0%, 92%, 100% {
+    filter: drop-shadow(0 0 40px rgba(221,161,25,.25));
+  }
+  93.5% {
+    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 60px rgba(255,244,214,1)) brightness(1.9);
+  }
+  95% {
+    filter: drop-shadow(0 0 20px rgba(255,220,150,.9)) drop-shadow(0 0 70px rgba(221,161,25,.7)) brightness(1.3);
+  }
+  97% {
+    filter: drop-shadow(0 0 40px rgba(221,161,25,.25)) brightness(1);
+  }
+}
+.brand-strike-bolt {
+  position: absolute;
+  top: -18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46%;
+  height: 145%;
+  pointer-events: none;
+  opacity: 0;
+  animation: boltFlash 7s ease-in-out infinite;
+}
+@keyframes boltFlash {
+  0%, 92%, 97%, 100% { opacity: 0; }
+  93.5% { opacity: 1; }
+  95%   { opacity: .55; }
+  96%   { opacity: 0; }
+}

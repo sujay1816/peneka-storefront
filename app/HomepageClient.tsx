@@ -1,11 +1,8 @@
 'use client'
-import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import toast from 'react-hot-toast'
 import EmberField from '@/components/effects/EmberField'
 import FireButton from '@/components/effects/FireButton'
-import { createClient } from '@/lib/supabase/client'
 import type { SiteConfig, Category, Product, Banner } from '@/types'
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } } }
@@ -48,55 +45,6 @@ const ROSTER_FLAVOUR: Record<string, { house: string; weapon: string; temper: st
   },
 }
 
-function WaitlistPanel({ config }: { config: SiteConfig }) {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const claimed = Number((config as any).founding_spots_claimed) || 62
-  const total = Number((config as any).founding_spots_total) || 100
-  const pct = Math.min(100, Math.round((claimed / total) * 100))
-
-  const handleClaim = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) return
-    setLoading(true)
-    try {
-      const supabase = createClient()
-      const { error } = await supabase.from('newsletter_subscribers').upsert(
-        { email: email.trim().toLowerCase(), subscribed_at: new Date().toISOString() },
-        { onConflict: 'email' }
-      )
-      if (error) throw error
-      toast.success('Spot claimed — see you at launch!')
-      setEmail('')
-    } catch {
-      toast.success('Spot claimed — see you at launch!')
-      setEmail('')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div style={{ maxWidth: 560, margin: '0 auto', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', background: 'var(--cream)', padding: '52px 40px', textAlign: 'center' }}>
-      <span className="actlabel" style={{ marginBottom: 24 }}>[ ACT.VI ] &nbsp;::&nbsp; THE_SUMMONING</span>
-      <h2 className="cin" style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 30, margin: '18px 0 14px' }}>Join the founding hundred</h2>
-      <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 28 }}>First hundred names get early access, founder pricing, and first pick of stock before the general drop.</p>
-      <div style={{ height: 5, background: 'rgba(255,255,255,.06)', marginBottom: 10, overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg, var(--gold-dark), var(--gold))', boxShadow: '0 0 12px rgba(221,161,25,.5)' }} />
-      </div>
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--gold)', marginBottom: 26 }}>{claimed} / {total} SPOTS CLAIMED</p>
-      <form onSubmit={handleClaim} style={{ display: 'flex', gap: 10, maxWidth: 380, margin: '0 auto' }}>
-        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com"
-          style={{ flex: 1, background: 'rgba(255,255,255,.03)', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', color: 'var(--text-primary)', padding: '13px 14px', fontFamily: 'var(--font-body)', fontSize: 13 }} />
-        <FireButton variant="primary">
-          <button type="submit" disabled={loading} style={{ all: 'unset', cursor: 'pointer' }}>{loading ? 'Claiming…' : 'Claim spot →'}</button>
-        </FireButton>
-      </form>
-    </div>
-  )
-}
-
 export default function HomepageClient({ config, categories, featured, bestsellers, newArrivals, banners, occasions = [], userId }: {
   config: SiteConfig; categories: Category[]; featured: Product[]; bestsellers: Product[]; newArrivals: Product[]; banners: Banner[]; occasions?: any[]; userId?: string
 }) {
@@ -107,26 +55,23 @@ export default function HomepageClient({ config, categories, featured, bestselle
     <div style={{ position: 'relative', background: 'var(--ivory)', color: 'var(--text-primary)' }}>
       <EmberField />
 
-      {/* founding-spots counter, top right */}
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'flex-end', padding: '16px 24px', pointerEvents: 'none' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.04em', color: 'var(--gold)', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', background: 'rgba(14,10,8,.7)', backdropFilter: 'blur(6px)', padding: '7px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)' }} />
-          FOUNDING HUNDRED &middot; {Number((config as any).founding_spots_claimed) || 62}/{Number((config as any).founding_spots_total) || 100} CLAIMED
-        </div>
-      </div>
-
       {/* ================= ACT I — HERO ================= */}
       <section style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 28px 80px' }}>
         <motion.div initial="hidden" animate="visible" variants={stagger} style={{ position: 'relative', zIndex: 2, maxWidth: 780 }}>
           <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
             [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>
           </motion.span>
-          <motion.h1 variants={fadeUp} style={{
-            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
-            background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
-            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-            filter: 'drop-shadow(0 0 40px rgba(221,161,25,.25))',
-          }}>{brandName.toUpperCase()}</motion.h1>
+          <div className="brand-strike-wrap">
+            <motion.h1 variants={fadeUp} className="brand-strike-text" style={{
+              fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
+              background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
+              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+            }}>{brandName.toUpperCase()}</motion.h1>
+            <svg className="brand-strike-bolt" viewBox="0 0 60 180" fill="none" aria-hidden="true">
+              <path d="M34 0 L14 78 L30 78 L20 180 L48 66 L30 66 Z" fill="#FFF7E0" />
+              <path d="M34 0 L14 78 L30 78 L20 180 L48 66 L30 66 Z" fill="none" stroke="#FFE8A8" strokeWidth="2" opacity="0.8" />
+            </svg>
+          </div>
           <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '26px 0 34px', color: 'var(--text-secondary)', fontSize: 13, letterSpacing: '.14em', textTransform: 'uppercase' }}>
             <span style={{ width: 52, height: 1, background: 'linear-gradient(90deg, transparent, var(--border-strong, rgba(221,161,25,.32)))' }} />
             <span style={{ fontFamily: 'var(--font-voice)', fontSize: 18, color: 'var(--gold)' }}>पिनाक</span>
@@ -143,7 +88,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
           </motion.p>
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: 14, justifyContent: 'center', marginTop: 34, flexWrap: 'wrap' }}>
             <FireButton href="/shop" variant="primary">Shop now &rarr;</FireButton>
-            <FireButton href="#waitlist" variant="ghost">Get early access</FireButton>
+            <FireButton href="#roster" variant="ghost">Explore warriors</FireButton>
           </motion.div>
         </motion.div>
       </section>
@@ -239,11 +184,6 @@ export default function HomepageClient({ config, categories, featured, bestselle
           <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 16 }}>We&rsquo;re not making costumes. We&rsquo;re making the thing you reach for on the day you need to remember who you actually are.</p>
           <p style={{ marginTop: 30, fontFamily: 'var(--font-voice)', fontSize: 20, color: 'var(--gold)' }}>॥ जय ॥</p>
         </div>
-      </section>
-
-      {/* ================= ACT VI — WAITLIST ================= */}
-      <section id="waitlist" style={{ position: 'relative', zIndex: 1, padding: '20px 28px 90px', textAlign: 'center' }}>
-        <WaitlistPanel config={config} />
       </section>
     </div>
   )
