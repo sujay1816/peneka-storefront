@@ -13,8 +13,8 @@ interface CartStore {
   items: CartItem[]
   appliedCoupon: AppliedCoupon | null
   addItem: (item: CartItem, userId?: string) => void
-  removeItem: (productId: string, colour: string, userId?: string) => void
-  updateQty: (productId: string, colour: string, qty: number, userId?: string) => Promise<void>
+  removeItem: (productId: string, colour: string, size: string, userId?: string) => void
+  updateQty: (productId: string, colour: string, size: string, qty: number, userId?: string) => Promise<void>
   clearCart: (userId?: string) => void
   syncToDb: (userId: string) => Promise<void>
   syncFromDb: (userId: string) => Promise<void>
@@ -32,9 +32,9 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (item, userId) => {
         set(state => {
-          const existing = state.items.find(i => i.productId === item.productId && i.colour === item.colour)
+          const existing = state.items.find(i => i.productId === item.productId && i.colour === item.colour && i.size === item.size)
           if (existing) {
-            return { items: state.items.map(i => i.productId === item.productId && i.colour === item.colour
+            return { items: state.items.map(i => i.productId === item.productId && i.colour === item.colour && i.size === item.size
               ? { ...i, quantity: Math.min(i.quantity + item.quantity, i.stock) } : i) }
           }
           return { items: [...state.items, item] }
@@ -42,9 +42,9 @@ export const useCartStore = create<CartStore>()(
         if (userId) setTimeout(() => get().syncToDb(userId), 0)
       },
 
-      removeItem: (productId, colour, userId) => {
+      removeItem: (productId, colour, size, userId) => {
         set(state => ({
-          items: state.items.filter(i => !(i.productId === productId && i.colour === colour))
+          items: state.items.filter(i => !(i.productId === productId && i.colour === colour && i.size === size))
         }))
         if (userId) {
           // Fix #6 — await the delete and handle errors
@@ -54,22 +54,23 @@ export const useCartStore = create<CartStore>()(
               .eq('user_id', userId)
               .eq('product_id', productId)
               .eq('colour', colour)
+              .eq('size', size)
           })
         }
       },
 
-      updateQty: async (productId, colour, qty, userId) => {
+      updateQty: async (productId, colour, size, qty, userId) => {
         let maxStock = 999
         try {
           const { createClient } = await import('@/lib/supabase/client')
           const sb = createClient()
           const { data } = await sb.from('product_variants').select('stock')
-            .eq('product_id', productId).eq('colour', colour).single()
+            .eq('product_id', productId).eq('colour', colour).eq('size', size).single()
           if (data) maxStock = data.stock
         } catch {}
         const safeQty = Math.max(1, Math.min(qty, maxStock))
         set(state => ({
-          items: state.items.map(i => i.productId === productId && i.colour === colour
+          items: state.items.map(i => i.productId === productId && i.colour === colour && i.size === size
             ? { ...i, quantity: safeQty, stock: maxStock } : i)
         }))
         if (userId) setTimeout(() => get().syncToDb(userId), 0)
@@ -107,13 +108,14 @@ export const useCartStore = create<CartStore>()(
             product_image: item.productImage,
             colour: item.colour,
             colour_hex: item.colourHex,
+            size: item.size,
             original_price: item.originalPrice,
             sale_price: item.salePrice,
             quantity: item.quantity,
             stock: item.stock,
             gst_rate: item.gstRate,
           })),
-          { onConflict: 'user_id,product_id,colour' }
+          { onConflict: 'user_id,product_id,colour,size' }
         )
         if (error) {
           // Fallback to delete+insert if upsert fails (e.g. no unique constraint yet)
@@ -122,7 +124,7 @@ export const useCartStore = create<CartStore>()(
             items.map(item => ({
               user_id: userId, product_id: item.productId, product_name: item.productName,
               product_slug: item.productSlug, product_image: item.productImage,
-              colour: item.colour, colour_hex: item.colourHex, original_price: item.originalPrice,
+              colour: item.colour, colour_hex: item.colourHex, size: item.size, original_price: item.originalPrice,
               sale_price: item.salePrice, quantity: item.quantity, stock: item.stock, gst_rate: item.gstRate,
             }))
           )
@@ -138,13 +140,14 @@ export const useCartStore = create<CartStore>()(
         const dbItems: CartItem[] = data.map((r: any) => ({
           productId: r.product_id, productName: r.product_name, productSlug: r.product_slug,
           productImage: r.product_image || '', colour: r.colour, colourHex: r.colour_hex || '#000000',
+          size: r.size || 'M',
           originalPrice: r.original_price, salePrice: r.sale_price, quantity: r.quantity,
           stock: r.stock, gstRate: r.gst_rate,
         }))
         const { items: localItems } = get()
         const merged = [...dbItems]
         localItems.forEach(local => {
-          const exists = merged.find(i => i.productId === local.productId && i.colour === local.colour)
+          const exists = merged.find(i => i.productId === local.productId && i.colour === local.colour && i.size === local.size)
           if (!exists) merged.push(local)
         })
         set({ items: merged })
