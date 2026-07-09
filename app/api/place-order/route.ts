@@ -65,7 +65,6 @@ export async function POST(request: Request) {
         product_name:   item.productName,
         product_image:  item.productImage || '',
         colour:         item.colour,
-        size:           item.size || 'M',
         quantity:       item.quantity,
         original_price: item.originalPrice,
         sale_price:     item.salePrice ?? item.originalPrice,
@@ -104,14 +103,14 @@ export async function POST(request: Request) {
       const productIds = items.map((i: any) => i.productId)
       const { data: variants } = await supabase
         .from('product_variants')
-        .select('product_id, colour, size, stock, products(name)')
+        .select('product_id, colour, stock, products(name)')
         .in('product_id', productIds)
         .lte('stock', lowStockThreshold)
         .gt('stock', 0)
 
       if (variants && variants.length > 0) {
         const messages = variants.map((v: any) =>
-          `${(v.products as any)?.name || v.product_id} (${v.colour} / ${v.size}): ${v.stock} left`
+          `${(v.products as any)?.name || v.product_id} (${v.colour}): ${v.stock} left`
         ).join(', ')
         await supabase.from('admin_notifications').insert({
           type: 'low_stock',
@@ -126,12 +125,12 @@ export async function POST(request: Request) {
       // Also check for out-of-stock (stock === 0)
       const { data: outOfStock } = await supabase
         .from('product_variants')
-        .select('product_id, colour, size, products(name)')
+        .select('product_id, colour, products(name)')
         .in('product_id', productIds)
         .eq('stock', 0)
       if (outOfStock && outOfStock.length > 0) {
         const names = outOfStock.map((v: any) =>
-          `${(v.products as any)?.name || v.product_id} (${v.colour} / ${v.size})`
+          `${(v.products as any)?.name || v.product_id} (${v.colour})`
         ).join(', ')
         await supabase.from('admin_notifications').insert({
           type: 'low_stock',

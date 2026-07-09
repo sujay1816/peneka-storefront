@@ -86,7 +86,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
       addItem({
         productId: product.id, productName: product.name, productSlug: product.slug,
         productImage: primaryImage?.url || '', colour: selectedVariant.colour,
-        colourHex: selectedVariant.colourHex, size: selectedVariant.size, originalPrice: product.originalPrice,
+        colourHex: selectedVariant.colourHex, originalPrice: product.originalPrice,
         salePrice: product.salePrice, quantity: 1,
         stock: liveStock,  // use live stock so cart quantity cap is accurate
         gstRate: product.gstRate
@@ -104,7 +104,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
       addItem({
         productId: product.id, productName: product.name, productSlug: product.slug,
         productImage: primaryImage?.url || '', colour: selectedVariant.colour,
-        colourHex: selectedVariant.colourHex, size: selectedVariant.size, originalPrice: product.originalPrice,
+        colourHex: selectedVariant.colourHex, originalPrice: product.originalPrice,
         salePrice: product.salePrice, quantity: 1, stock: selectedVariant.stock, gstRate: product.gstRate
       }, userId)
       toast.success(

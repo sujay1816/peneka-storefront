@@ -23,7 +23,7 @@ function mapImage(r: any): ProductImage {
   return { id: r.id, url: r.url, publicId: r.public_id || '', altText: r.alt_text || '', isPrimary: r.is_primary, order: r.order_index }
 }
 function mapVariant(r: any): ProductVariant {
-  return { id: r.id, size: r.size || 'M', colour: r.colour, colourHex: r.colour_hex, stock: r.stock, sku: r.sku || '', imageUrl: r.image_url || null }
+  return { id: r.id, colour: r.colour, colourHex: r.colour_hex, stock: r.stock, sku: r.sku || '', imageUrl: r.image_url || null }
 }
 function mapProduct(r: any): Product {
   const variants = (r.product_variants || []).map(mapVariant)
@@ -46,7 +46,7 @@ function mapProduct(r: any): Product {
   }
 }
 
-const PRODUCT_SELECT = `*, categories(slug, name), product_images(id,url,public_id,alt_text,is_primary,order_index), product_variants(id,colour,colour_hex,size,stock,sku,image_url)`
+const PRODUCT_SELECT = `*, categories(slug, name), product_images(id,url,public_id,alt_text,is_primary,order_index), product_variants(id,colour,colour_hex,stock,sku,image_url)`
 
 // Server-side filter params — all filtering done in Postgres, not in JS
 export interface ProductFilters {
@@ -236,7 +236,7 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
     createdAt: r.created_at, updatedAt: r.updated_at,
     items: (r.order_items || []).map((i: any) => ({
       id: i.id, productId: i.product_id, productName: i.product_name, productImage: i.product_image,
-      colour: i.colour, size: i.size || 'M', quantity: i.quantity, originalPrice: i.original_price, salePrice: i.sale_price,
+      colour: i.colour, quantity: i.quantity, originalPrice: i.original_price, salePrice: i.sale_price,
       gstRate: i.gst_rate, gstAmount: i.gst_amount, total: i.total
     }))
   }))

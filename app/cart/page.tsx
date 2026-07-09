@@ -30,14 +30,14 @@ export default function CartPage() {
     if (items.length > 0) {
       const productIds = [...new Set(items.map(i => i.productId))]
       supabase.from('product_variants')
-        .select('product_id, colour, size, stock')
+        .select('product_id, colour, stock')
         .in('product_id', productIds)
         .then(({ data }) => {
           if (!data) return
           items.forEach(item => {
-            const live = data.find((v: any) => v.product_id === item.productId && v.colour === item.colour && v.size === item.size)
+            const live = data.find((v: any) => v.product_id === item.productId && v.colour === item.colour)
             if (live && live.stock !== item.stock) {
-              updateQty(item.productId, item.colour, item.size, Math.min(item.quantity, live.stock))
+              updateQty(item.productId, item.colour, Math.min(item.quantity, live.stock))
             }
           })
         })
@@ -142,7 +142,7 @@ export default function CartPage() {
                 const price = item.salePrice ?? item.originalPrice
                 const isOnSale = !!item.salePrice
                 return (
-                  <motion.div key={`${item.productId}-${item.colour}-${item.size}`} layout exit={{ opacity: 0, x: -20, height: 0 }}
+                  <motion.div key={`${item.productId}-${item.colour}`} layout exit={{ opacity: 0, x: -20, height: 0 }}
                     className="flex gap-4 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
                     <div className="w-24 h-32 flex-shrink-0 border overflow-hidden cart-item-image" style={{ background: 'var(--cream)', borderColor: 'var(--border)' }}>
                       {item.productImage ? (
@@ -153,7 +153,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <Link href={`/product/${item.productSlug}`}><h3 className="font-light mb-1 hover:underline" style={{ fontFamily: 'var(--font-heading)', fontSize: '16px' }}>{item.productName}</h3></Link>
-                      <p className="text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Colour: <span style={{ color: 'var(--text-primary)' }}>{item.colour}</span> &nbsp;·&nbsp; Size: <span style={{ color: 'var(--text-primary)' }}>{item.size}</span></p>
+                      <p className="text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Colour: <span style={{ color: 'var(--text-primary)' }}>{item.colour}</span></p>
                       {item.stock <= 3 && item.stock > 0 && (
                         <p className="text-xs mb-2 font-medium" style={{ color: '#D97706' }}>⚠ Only {item.stock} left in stock</p>
                       )}
@@ -166,16 +166,16 @@ export default function CartPage() {
                       <div className="flex items-center justify-between flex-wrap gap-3">
                         <div className="flex items-center border" style={{ borderColor: 'var(--border)' }}>
                           {/* FIX #3: w-11 h-11 on mobile (44px touch target), w-8 h-8 on sm+ */}
-                          <button type="button" disabled={updatingId === item.productId + item.colour + item.size} onClick={() => { setUpdatingId(item.productId + item.colour + item.size); updateQty(item.productId, item.colour, item.size, item.quantity - 1, userId || undefined) }} className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center" style={{ color: 'var(--text-primary)' }}><Minus size={16} /></button>
+                          <button type="button" disabled={updatingId === item.productId + item.colour} onClick={() => { setUpdatingId(item.productId + item.colour); updateQty(item.productId, item.colour, item.quantity - 1, userId || undefined) }} className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center" style={{ color: 'var(--text-primary)' }}><Minus size={16} /></button>
                           <span className="w-10 text-center font-medium" style={{ fontSize: 15 }}>{item.quantity}</span>
-                          <button type="button" disabled={updatingId === item.productId + item.colour + item.size || item.quantity >= item.stock} onClick={() => { setUpdatingId(item.productId + item.colour + item.size); updateQty(item.productId, item.colour, item.size, item.quantity + 1, userId || undefined) }} className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center disabled:opacity-30" style={{ color: 'var(--text-primary)' }}><Plus size={16} /></button>
+                          <button type="button" disabled={updatingId === item.productId + item.colour || item.quantity >= item.stock} onClick={() => { setUpdatingId(item.productId + item.colour); updateQty(item.productId, item.colour, item.quantity + 1, userId || undefined) }} className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center disabled:opacity-30" style={{ color: 'var(--text-primary)' }}><Plus size={16} /></button>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="text-right">
                             <p className="font-medium" style={{ color: 'var(--crimson)' }}>{formatPrice(price * item.quantity)}</p>
                             {isOnSale && <p className="text-xs line-through" style={{ color: 'var(--text-secondary)' }}>{formatPrice(item.originalPrice * item.quantity)}</p>}
                           </div>
-                          <button type="button" disabled={updatingId === item.productId + item.colour + item.size} onClick={() => { setUpdatingId(item.productId + item.colour + item.size); removeItem(item.productId, item.colour, item.size, userId || undefined); toast.success('Item removed') }} aria-label="Remove item from cart" className="p-1" style={{ color: 'var(--text-secondary)' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--crimson)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}><Trash2 size={16} /></button>
+                          <button type="button" disabled={updatingId === item.productId + item.colour} onClick={() => { setUpdatingId(item.productId + item.colour); removeItem(item.productId, item.colour, userId || undefined); toast.success('Item removed') }} aria-label="Remove item from cart" className="p-1" style={{ color: 'var(--text-secondary)' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--crimson)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-secondary)')}><Trash2 size={16} /></button>
                         </div>
                       </div>
                     </div>

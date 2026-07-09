@@ -98,14 +98,14 @@ export default function ComparePage() {
                       </button>
                       <Link href={`/product/${p.slug}`}>
                         <div className="relative rounded-lg overflow-hidden mb-3" style={{ aspectRatio: '2/3', background: 'var(--cream)' }}>
-                          {img ? <Image src={img.url} alt={p.name} fill className="object-cover" sizes="180px" /> : <div className="w-full h-full flex items-center justify-center text-4xl">👕</div>}
+                          {img ? <Image src={img.url} alt={p.name} fill className="object-cover" sizes="180px" /> : <div className="w-full h-full flex items-center justify-center text-4xl">🥻</div>}
                         </div>
                         <p className="text-sm font-semibold line-clamp-2 mb-1" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>{p.name}</p>
                       </Link>
                       {!p.isOutOfStock && v && (
                         <button type="button"
                           onClick={() => {
-                            addItem({ productId: p.id, productName: p.name, productSlug: p.slug, productImage: img?.url || '', colour: v.colour, colourHex: v.colourHex, size: v.size, originalPrice: p.originalPrice, salePrice: p.salePrice, quantity: 1, stock: v.stock, gstRate: p.gstRate })
+                            addItem({ productId: p.id, productName: p.name, productSlug: p.slug, productImage: img?.url || '', colour: v.colour, colourHex: v.colourHex, originalPrice: p.originalPrice, salePrice: p.salePrice, quantity: 1, stock: v.stock, gstRate: p.gstRate })
                             toast.success('Added to cart!', { icon: '🛍️', className: 'toast-brand toast-success-brand' })
                           }}
                           className="flex items-center justify-center gap-1.5 w-full py-2 text-xs font-medium rounded mt-2"
