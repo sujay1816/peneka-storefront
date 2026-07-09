@@ -26,7 +26,7 @@ async function notifyRestockWaiters(supabase: any, productId: string, colour: st
     const [apiKey, fromEmail, brandName] = await Promise.all([
       getCfg('setup_resend_api_key', process.env.RESEND_API_KEY),
       getCfg('setup_from_email',     process.env.FROM_EMAIL || ''),
-      getCfg('brand_name',           process.env.NEXT_PUBLIC_BRAND_NAME || 'Peneka'),
+      getCfg('brand_name',           process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'),
     ])
 
     if (!apiKey || !fromEmail) return  // email not configured — skip silently

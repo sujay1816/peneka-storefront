@@ -373,7 +373,7 @@ export default function ShopContent({ products, categories, config, userId: serv
           {/* Mobile: sort + filter buttons only */}
           <div className="flex items-center gap-2 lg:hidden shop-mobile-toolbar">
             <select value={sortBy} onChange={e => setSortByAndNav(e.target.value)}
-              className="text-xs border px-2 outline-none flex-1 min-w-0" style={{ borderColor: 'var(--border)', height: 40, color: 'var(--text-primary)', background: 'white' }}>
+              className="text-xs border px-2 outline-none flex-1 min-w-0" style={{ borderColor: 'var(--border)', height: 40, color: 'var(--text-primary)', background: 'var(--cream)' }}>
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
             <button type="button" onClick={() => setFiltersOpen(true)}
@@ -423,7 +423,7 @@ export default function ShopContent({ products, categories, config, userId: serv
             </button>
           </div>
           <select value={sortBy} onChange={e => { setSortBy(e.target.value); setPage(1) }}
-            className="text-xs border px-2 outline-none" style={{ borderColor: 'var(--border)', height: 36, color: 'var(--text-primary)', background: 'white' }}>
+            className="text-xs border px-2 outline-none" style={{ borderColor: 'var(--border)', height: 36, color: 'var(--text-primary)', background: 'var(--cream)' }}>
             {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
           <button type="button" onClick={() => setFiltersOpen(!filtersOpen)} className="flex items-center gap-2 text-xs border px-3"

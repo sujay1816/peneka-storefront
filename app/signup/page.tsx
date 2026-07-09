@@ -96,17 +96,17 @@ function SignupForm() {
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
             We sent a confirmation link to
           </p>
-          <p style={{ color: '#C9A84C', fontSize: 15, fontWeight: 500, marginBottom: 24 }}>{email}</p>
+          <p style={{ color: '#DDA119', fontSize: 15, fontWeight: 500, marginBottom: 24 }}>{email}</p>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginBottom: 32 }}>
             Click the link in the email to activate your account. Check your spam folder if you don't see it.
           </p>
           <Link href="/login"
-            style={{ display: 'inline-block', padding: '13px 32px', background: 'linear-gradient(135deg, #8B1A2B 0%, #6B1220 100%)', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+            style={{ display: 'inline-block', padding: '13px 32px', background: 'linear-gradient(135deg, #C1442F 0%, #7A2A1D 100%)', color: 'white', borderRadius: 8, fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
             Go to Login
           </Link>
           <p style={{ marginTop: 16, fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>
             Wrong email?{' '}
-            <button type="button" onClick={() => setEmailSent(false)} style={{ background: 'none', border: 'none', color: '#C9A84C', cursor: 'pointer', fontSize: 12 }}>
+            <button type="button" onClick={() => setEmailSent(false)} style={{ background: 'none', border: 'none', color: '#DDA119', cursor: 'pointer', fontSize: 12 }}>
               Go back
             </button>
           </p>
@@ -119,9 +119,9 @@ function SignupForm() {
     <div style={{ minHeight: '100vh', display: 'flex', background: '#0D0D0D', fontFamily: 'DM Sans, sans-serif' }}>
       {/* Left panel */}
       <div className="hidden lg:flex" style={{ width: '50%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #0A1A0E 0%, #0F2C18 35%, #1B6B35 60%, #0F2C18 85%, #0A1A0E 100%)' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'repeating-linear-gradient(0deg, #C9A84C 0px, #C9A84C 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #C9A84C 0px, #C9A84C 2px, transparent 2px, transparent 20px)' }} />
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'repeating-linear-gradient(0deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px)' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
         <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 48, textAlign: 'center' }}>
           <div style={{ position: 'relative', marginBottom: 24 }}>
             <div style={{ position: 'absolute', inset: -32, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.3) 0%, transparent 70%)' }} />
@@ -130,8 +130,8 @@ function SignupForm() {
               : <div style={{ width: 90, height: 90, borderRadius: '50%', background: 'rgba(139,26,43,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: 'white', fontFamily: 'Cormorant Garamond, serif', position: 'relative' }}>S</div>}
           </div>
           <h1 style={{ fontSize: 48, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'Cormorant Garamond, serif' }}>Join the Legacy</h1>
-          <p style={{ color: '#C9A84C', fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: 20 }}>{`✦ ${brandSubtitle} ✦`}</p>
-          <div style={{ width: 80, height: 1, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)', marginBottom: 20 }} />
+          <p style={{ color: '#DDA119', fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: 20 }}>{`✦ ${brandSubtitle} ✦`}</p>
+          <div style={{ width: 80, height: 1, background: 'linear-gradient(to right, transparent, #DDA119, transparent)', marginBottom: 20 }} />
           <p style={{ fontSize: 18, fontWeight: 300, fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', fontFamily: 'Cormorant Garamond, serif', lineHeight: 1.6 }}>
             "Create your account and<br />experience royal elegance"
           </p>
@@ -139,7 +139,7 @@ function SignupForm() {
             {['Early access to new arrivals', 'Exclusive member discounts', 'Order tracking & history', 'Wishlist across all devices'].map((b, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                 <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ color: '#C9A84C', fontSize: 10 }}>✓</span>
+                  <span style={{ color: '#DDA119', fontSize: 10 }}>✓</span>
                 </div>
                 <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{b}</p>
               </div>
@@ -189,7 +189,7 @@ function SignupForm() {
               <div key={f.label}>
                 <label style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', display: 'block', marginBottom: 6 }}>{f.label}</label>
                 <input type={f.type} value={f.value} onChange={e => f.set(e.target.value)} required placeholder={f.placeholder} autoComplete={(f as any).ac}
-                  style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none', fontFamily: 'DM Sans, sans-serif' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #C9A84C'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
+                  style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none', fontFamily: 'DM Sans, sans-serif' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #DDA119'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
               </div>
             ))}
             <div>
@@ -204,7 +204,7 @@ function SignupForm() {
               </div>
             </div>
             <button type="submit" disabled={loading}
-              style={{ width: '100%', padding: 13, background: loading ? 'rgba(139,26,43,0.5)' : 'linear-gradient(135deg, #8B1A2B 0%, #6B1220 100%)', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 500, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'DM Sans, sans-serif', boxShadow: '0 4px 20px rgba(139,26,43,0.4)' }}>
+              style={{ width: '100%', padding: 13, background: loading ? 'rgba(139,26,43,0.5)' : 'linear-gradient(135deg, #C1442F 0%, #7A2A1D 100%)', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 500, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'DM Sans, sans-serif', boxShadow: '0 4px 20px rgba(139,26,43,0.4)' }}>
               {loading
                 ? <><span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Creating account...</>
                 : <><span>Create Account</span><ArrowRight size={14} /></>}
@@ -212,7 +212,7 @@ function SignupForm() {
           </form>
 
           <p style={{ textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.4)', marginTop: 24 }}>
-            Already have an account? <Link href="/login" style={{ color: '#C9A84C', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
+            Already have an account? <Link href="/login" style={{ color: '#DDA119', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
           </p>
         </div>
       </div>

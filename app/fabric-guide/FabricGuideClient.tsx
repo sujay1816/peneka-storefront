@@ -45,7 +45,7 @@ export default function FabricGuideClient({ fabrics }: { fabrics: Fabric[] }) {
             <button key={f.id} type="button"
               onClick={() => setSelected(f)}
               className="group text-left rounded-lg p-5 transition-all hover:-translate-y-1"
-              style={{ background: 'white', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+              style={{ background: 'var(--cream)', border: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(139,26,43,0.12)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--crimson)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)' }}>
               <div className="text-3xl mb-3">{FABRIC_ICONS[f.slug] || '🥻'}</div>
@@ -68,7 +68,7 @@ export default function FabricGuideClient({ fabrics }: { fabrics: Fabric[] }) {
       )}
 
       {/* Inline CTA */}
-      <div className="mt-16 rounded-xl p-8 text-center" style={{ background: 'linear-gradient(135deg, #8B1A2B, #6B1220)' }}>
+      <div className="mt-16 rounded-xl p-8 text-center" style={{ background: 'linear-gradient(135deg, #C1442F, #7A2A1D)' }}>
         <p className="text-white text-xl font-light mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Ready to find your perfect saree?</p>
         <p className="text-sm mb-6" style={{ color: 'rgba(255,255,255,0.7)' }}>Now that you know the fabrics, let us help you choose.</p>
         <Link href="/shop" className="inline-flex items-center gap-2 px-6 py-3 rounded text-sm font-medium" style={{ background: 'var(--gold)', color: '#1A1A1A' }}>
@@ -82,10 +82,10 @@ export default function FabricGuideClient({ fabrics }: { fabrics: Fabric[] }) {
           style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
           onClick={e => { if (e.target === e.currentTarget) setSelected(null) }}>
           <div className="w-full sm:max-w-lg max-h-screen sm:max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-xl"
-            style={{ background: 'white' }}>
+            style={{ background: 'var(--cream)' }}>
             {/* Modal header */}
             <div className="sticky top-0 flex items-center justify-between p-5 border-b z-10"
-              style={{ background: 'white', borderColor: 'var(--border)' }}>
+              style={{ background: 'var(--cream)', borderColor: 'var(--border)' }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{FABRIC_ICONS[selected.slug] || '🥻'}</span>
                 <div>

@@ -38,7 +38,7 @@ export default function WeaversClient({ weavers }: { weavers: Weaver[] }) {
             const expanded = expandedId === w.id
             return (
               <div key={w.id} className="rounded-xl overflow-hidden transition-all"
-                style={{ background: 'white', border: '1px solid var(--border)', boxShadow: expanded ? '0 8px 32px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.04)' }}>
+                style={{ background: 'var(--cream)', border: '1px solid var(--border)', boxShadow: expanded ? '0 8px 32px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.04)' }}>
                 {/* Photo */}
                 <div className="relative" style={{ aspectRatio: '4/3', background: 'var(--cream)' }}>
                   {w.image_url ? (

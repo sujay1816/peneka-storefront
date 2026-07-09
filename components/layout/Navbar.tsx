@@ -145,7 +145,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
             {/* Brand */}
             <Link href="/" className="flex items-center gap-2 flex-shrink-0 min-w-0">
               <Image
-                src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%238B1A2B'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3ES%3C/text%3E%3C/svg%3E"}
+                src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23C1442F'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3EP%3C/text%3E%3C/svg%3E"}
                 alt={config.brand_name || 'Our Store'}
                 width={36} height={36} sizes="36px" className="object-contain flex-shrink-0"
               />
@@ -202,7 +202,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                   style={{ background: profileOpen ? 'var(--cream)' : 'transparent' }}>
                   {user ? (
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                      style={{ background: 'linear-gradient(135deg, var(--crimson) 0%, #6B1220 100%)' }}>
+                      style={{ background: 'linear-gradient(135deg, var(--crimson) 0%, #7A2A1D 100%)' }}>
                       {firstLetter}
                     </div>
                   ) : (
@@ -221,7 +221,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                       style={{ borderColor: 'var(--border)', borderRadius: 12, width: 240 }}>
                       {user ? (
                         <>
-                          <div className="px-4 py-4" style={{ background: 'linear-gradient(135deg, var(--crimson) 0%, #6B1220 100%)' }}>
+                          <div className="px-4 py-4" style={{ background: 'linear-gradient(135deg, var(--crimson) 0%, #7A2A1D 100%)' }}>
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
                                 style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.4)' }}>
@@ -322,7 +322,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
               className="fixed left-0 top-0 bottom-0 z-50 w-80 flex flex-col bg-white">
               <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--border)', background: 'var(--cream)' }}>
                 <div className="flex items-center gap-3">
-                  <Image src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%238B1A2B'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3ES%3C/text%3E%3C/svg%3E"} alt={config.brand_name || "SKSS"} width={36} height={36} sizes="36px" className="object-contain" />
+                  <Image src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23C1442F'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3EP%3C/text%3E%3C/svg%3E"} alt={config.brand_name || "Pinaka"} width={36} height={36} sizes="36px" className="object-contain" />
                   <div>
                     <p className="text-sm font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)' }}>{config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'}</p>
                     <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', fontSize: '9px' }}>{config.brand_subtitle || 'MAHABHARATA · RAMAYANA · WORN'}</p>
@@ -332,7 +332,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
               </div>
 
               {user && (
-                <div className="flex items-center gap-3 px-5 py-4 border-b" style={{ borderColor: 'var(--border)', background: 'linear-gradient(135deg, var(--crimson) 0%, #6B1220 100%)' }}>
+                <div className="flex items-center gap-3 px-5 py-4 border-b" style={{ borderColor: 'var(--border)', background: 'linear-gradient(135deg, var(--crimson) 0%, #7A2A1D 100%)' }}>
                   <div className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-base flex-shrink-0"
                     style={{ background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.4)' }}>
                     {firstLetter}

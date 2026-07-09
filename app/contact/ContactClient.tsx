@@ -66,7 +66,7 @@ export default function ContactClient({ cfg }: { cfg: Record<string, string> }) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {contacts.map((c: any, i) => (
             <div key={i}
-              className="p-6 rounded-lg border flex items-start gap-4" style={{ borderColor: 'var(--border)', background: 'white' }}>
+              className="p-6 rounded-lg border flex items-start gap-4" style={{ borderColor: 'var(--border)', background: 'var(--cream)' }}>
               <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--cream)', color: 'var(--crimson)' }}>
                 {c.icon}
               </div>

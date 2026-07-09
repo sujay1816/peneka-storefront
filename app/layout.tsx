@@ -9,7 +9,7 @@ import FontLoader from '@/components/layout/FontLoader'
 import { createClient } from '@/lib/supabase/server'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
-const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Peneka'
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -80,10 +80,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const DEFAULT_BRAND = {
-  color_primary: '#9A3324',
+  color_primary: '#C1442F',
   color_accent: '#DDA119',
-  color_background: '#F1E3C6',
-  color_page_bg: '#FBF0DA',
+  color_background: '#1B140D',
+  color_page_bg: '#0E0A08',
   font_heading: 'Cinzel',
   font_body: 'Karla',
   logo_url: '',
@@ -114,9 +114,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const brand = await getBrandConfig()
   const headingFont = brand.font_heading.replace(/ /g, '+')
   const bodyFont = brand.font_body.replace(/ /g, '+')
-  const fontsUrl = `https://fonts.googleapis.com/css2?family=${headingFont}:wght@500;600;700&family=${bodyFont}:ital,wght@0,400;0,500;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap`
+  const fontsUrl = `https://fonts.googleapis.com/css2?family=${headingFont}:wght@500;600;700&family=${bodyFont}:ital,wght@0,400;0,500;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap`
 
-  const primary = brand.color_primary || '#9A3324'
+  const primary = brand.color_primary || '#C1442F'
   const cssVars = `
     :root {
       --crimson: ${primary};
@@ -125,17 +125,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       --gold: ${brand.color_accent || '#DDA119'};
       --gold-dark: ${adjustColor(brand.color_accent || '#DDA119', -20)};
       --gold-light: ${adjustColor(brand.color_accent || '#DDA119', 15)};
-      --cream: ${brand.color_background || '#F1E3C6'};
-      --cream-dark: ${adjustColor(brand.color_background || '#F1E3C6', -15)};
-      --ivory: ${brand.color_page_bg || '#FBF0DA'};
+      --cream: ${brand.color_background || '#1B140D'};
+      --cream-dark: ${adjustColor(brand.color_background || '#1B140D', -10)};
+      --ivory: ${brand.color_page_bg || '#0E0A08'};
       --font-heading: '${brand.font_heading}', serif;
       --font-body: '${brand.font_body}', sans-serif;
       --font-voice: 'Cormorant Garamond', serif;
-      --ink: #3B2415;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ink: #F1E3C6;
       --verdigris: #5C6E3F;
-      --text-primary: #3B2415;
-      --text-secondary: #8A6F4E;
-      --border: #E8D6AE;
+      --text-primary: #F1E3C6;
+      --text-secondary: #9C8F73;
+      --border: rgba(221,161,25,.16);
     }
   `
 

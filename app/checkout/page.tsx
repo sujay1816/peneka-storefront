@@ -213,7 +213,7 @@ export default function CheckoutPage() {
           }
         },
         prefill: { name: form.fullName, email, contact: form.phone },
-        theme: { color: '#8B1A2B' },
+        theme: { color: '#C1442F' },
         modal: { ondismiss: () => setLoading(false) },
       }
       const rzp = new window.Razorpay(options)

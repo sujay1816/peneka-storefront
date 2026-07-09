@@ -3,21 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --crimson:       #9A3324;
-  --crimson-dark:  #7A2A1D;
-  --crimson-light: #B54432;
+  --crimson:       #C1442F;
+  --crimson-dark:  #9A3324;
+  --crimson-light: #D65F45;
   --gold:          #DDA119;
-  --gold-dark:     #B57F0F;
+  --gold-dark:     #8A5A16;
   --gold-light:    #EDBB40;
-  --cream:         #F1E3C6;
-  --cream-dark:    #E8D6AE;
-  --ivory:         #FBF0DA;
-  --text-primary:  #1A1A1A;
-  --text-secondary:#5A4A3A;
-  --border:        #E8DDD4;
+  --cream:         #1B140D;
+  --cream-dark:    #241A10;
+  --ivory:         #0E0A08;
+  --text-primary:  #F1E3C6;
+  --text-secondary:#9C8F73;
+  --border:        rgba(221,161,25,.16);
+  --border-strong: rgba(221,161,25,.32);
   --font-heading:  'Cinzel', serif;
   --font-body:     'Karla', sans-serif;
   --font-voice:    'Cormorant Garamond', serif;
+  --font-mono:     'JetBrains Mono', monospace;
   --ink:           #3B2415;
   --verdigris:     #5C6E3F;
 
@@ -724,4 +726,18 @@ video {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Act-label pill used across the homepage's chaptered sections */
+.actlabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--gold);
+  border: 1px solid var(--border-strong, rgba(221,161,25,.32));
+  padding: 7px 16px;
+  background: rgba(221,161,25,.05);
 }

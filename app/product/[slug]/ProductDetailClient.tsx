@@ -177,9 +177,10 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
     await supabase.from('restock_requests').upsert({
       product_id: product.id,
       colour: selectedVariant.colour,
+      size: selectedVariant.size,
       email: notifyEmail.trim().toLowerCase(),
       user_id: user?.id || null,
-    }, { onConflict: 'product_id,colour,email' })
+    }, { onConflict: 'product_id,colour,size,email' })
     setNotifySubmitted(true)
     setNotifyLoading(false)
   }
@@ -525,7 +526,7 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
               <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
                 style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
                 onClick={e => { if (e.target === e.currentTarget) setFabricModalOpen(false) }}>
-                <div className="w-full sm:max-w-md rounded-t-2xl sm:rounded-xl overflow-hidden" style={{ background: 'white', maxHeight: '90vh' }}>
+                <div className="w-full sm:max-w-md rounded-t-2xl sm:rounded-xl overflow-hidden" style={{ background: 'var(--cream)', maxHeight: '90vh' }}>
                   <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--border)' }}>
                     <h3 className="font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>About {product.fabric}</h3>
                     <button type="button" onClick={() => setFabricModalOpen(false)} className="p-1.5 rounded-full" style={{ color: 'var(--text-secondary)' }}>✕</button>
@@ -547,7 +548,7 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShareMenuOpen(false)} />
                   <div className="absolute right-0 top-8 z-50 rounded shadow-lg overflow-hidden"
-                    style={{ background: 'white', border: '1px solid var(--border)', minWidth: 160 }}>
+                    style={{ background: 'var(--cream)', border: '1px solid var(--border)', minWidth: 160 }}>
                     <button type="button" onClick={() => { handleShare('whatsapp'); setShareMenuOpen(false) }}
                       className="flex items-center gap-2 w-full px-4 py-2.5 text-xs font-medium transition-colors"
                       style={{ color: '#25D366' }}
@@ -820,7 +821,7 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
                   <p className="text-xs mb-4" style={{ color: '#1B7A3E' }}>✔ You purchased this product — your review will be marked as verified.</p>
                 )}
                 <div className="flex gap-1 mb-4" role="group" aria-label="Rating">{Array.from({ length: 5 }).map((_, i) => <button type="button" key={i} aria-label={`Rate ${i + 1} star${i > 0 ? 's' : ''}`} aria-pressed={i < reviewRating} onClick={() => setReviewRating(i + 1)}><Star size={22} fill={i < reviewRating ? 'var(--gold)' : 'none'} stroke="var(--gold)" /></button>)}</div>
-                <textarea value={reviewText} onChange={e => setReviewText(e.target.value)} placeholder="Share your experience with this saree..." className="input-base w-full mb-3" style={{ height: 100, padding: '12px 14px', resize: 'none' }} />
+                <textarea value={reviewText} onChange={e => setReviewText(e.target.value)} placeholder="Share your experience with this tee..." className="input-base w-full mb-3" style={{ height: 100, padding: '12px 14px', resize: 'none' }} />
                 <button type="button" className="btn-primary" onClick={submitReview} disabled={reviewSubmitting || !reviewText.trim()}>
                   {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
                 </button>

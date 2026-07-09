@@ -1,624 +1,262 @@
 'use client'
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Shield, Truck, RotateCcw, Award, ChevronRight, ChevronLeft, Play, Pause } from 'lucide-react'
-import ProductCard from '@/components/product/ProductCard'
-import RecentlyViewed from '@/components/product/RecentlyViewed'
-import type { SiteConfig, Category, Product, Banner, BannerSlide } from '@/types'
+import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
+import EmberField from '@/components/effects/EmberField'
+import FireButton from '@/components/effects/FireButton'
+import { createClient } from '@/lib/supabase/client'
+import type { SiteConfig, Category, Product, Banner } from '@/types'
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } } }
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }
 
-// ── optimise Cloudinary video URL ─────────────────────────────────────────────
-const optimiseVideo = (url: string) =>
-  url?.includes('cloudinary.com')
-    ? url.replace('/upload/', '/upload/q_auto,f_auto/')
-    : url
-
-// ── VideoSlide — plays one video, loops it, honours pause from parent ─────────
-function VideoSlide({ src, poster, objectPosition, onEnded, isPaused }: {
-  src: string; poster?: string; objectPosition?: string; onEnded: () => void; isPaused?: boolean
-}) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const optimised = optimiseVideo(src)
-
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    v.load()
-    const p = v.play()
-    if (p) p.catch(() => {})
-  }, [optimised])
-
-  // Honour pause/play toggle
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    if (isPaused) { v.pause() } else { v.play().catch(() => {}) }
-  }, [isPaused])
-
-  return (
-    <video ref={videoRef} autoPlay muted playsInline preload="auto" loop
-      poster={poster} onEnded={onEnded}
-      className="absolute inset-0 w-full h-full object-cover hero-media"
-      style={{ objectPosition: objectPosition || 'center' }}>
-      <source src={optimised} />
-    </video>
-  )
+// Flavour stat-card copy for each launch character. Keyed by category slug so
+// it lines up with whatever categories actually exist in the database — if a
+// new character category is added without an entry here, the card just shows
+// its name and design count without the extra flavour text, rather than breaking.
+const ROSTER_FLAVOUR: Record<string, { house: string; weapon: string; temper: string; line: string; emblem: string }> = {
+  bheema: {
+    house: 'Hastinapura', weapon: 'Gada, 90kg', temper: 'Zero to forest-uprooting',
+    line: 'The one who never learned to lose an argument quietly.',
+    emblem: '<ellipse cx="20" cy="12" rx="8" ry="9"/><path d="M20 3v-2M13 6l-3-3M27 6l3-3M11 15l-3-1M29 15l3-1M20 21v16M15 37h10"/>',
+  },
+  arjuna: {
+    house: 'Indraprastha', weapon: 'Gandiva', temper: 'Calm, then devastating',
+    line: 'Doubted himself for one whole chapter. Still showed up.',
+    emblem: '<path d="M27 4C15 10 15 30 27 36" fill="none"/><path d="M27 4L27 36" stroke-dasharray="2 3"/><path d="M13 20h16M24 15l6 5-6 5"/>',
+  },
+  karna: {
+    house: 'Anga', weapon: 'Vijaya, cursed', temper: 'Loyal past the point of sense',
+    line: 'Chose the harder side because it was still his side.',
+    emblem: '<circle cx="20" cy="20" r="7.5"/><path d="M20 4v5M20 31v5M4 20h5M31 20h5M9 9l3.5 3.5M27.5 27.5 31 31M31 9l-3.5 3.5M12.5 27.5 9 31"/>',
+  },
+  hanuman: {
+    house: 'Kishkindha', weapon: 'His own scale', temper: 'Devotion with a flight plan',
+    line: 'Crossed an ocean because someone needed a message delivered.',
+    emblem: '<path d="M4 32L15 12l7 11 5-7 9 16z"/><path d="M15 12l3 6M27 16l2 4"/>',
+  },
+  rama: {
+    house: 'Ayodhya', weapon: 'Kodanda', temper: 'Duty before comfort, always',
+    line: 'Gave up a throne rather than break a promise.',
+    emblem: '<path d="M26 12C17 16 17 28 26 32" fill="none"/><path d="M26 12L26 32" stroke-dasharray="2 3"/><path d="M13 22h13"/>',
+  },
+  krishna: {
+    house: 'Dwaraka', weapon: 'Sudarshana Chakra', temper: 'Three steps ahead, always smiling',
+    line: 'Won the war without lifting the weapon everyone expected.',
+    emblem: '<circle cx="20" cy="20" r="9"/><circle cx="20" cy="20" r="3"/><path d="M20 11v-4M20 33v-4M11 20h-4M33 20h-4M13.6 13.6 10.8 10.8M29.2 29.2 26.4 26.4M26.4 13.6 29.2 10.8M10.8 29.2 13.6 26.4"/>',
+  },
 }
 
-// ── HeroSlideshow ──────────────────────────────────────────────────────────────
-const DEFAULT_DURATION = 5
+function WaitlistPanel({ config }: { config: SiteConfig }) {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
 
-function HeroSlideshow({ banner, overlayGradient, textCol, tagline }: {
-  banner: Banner
-  overlayGradient: string
-  textCol: { primary: string; secondary: string; accent: string; border: string }
-  tagline: string
-}) {
-  // Build slides: new card-based format first, then legacy video_urls, then single image
-  const slides: BannerSlide[] = (() => {
-    if (banner.slides?.length > 0) {
-      // Fill in banner.imageUrl as fallback for any slide missing an image
-      return banner.slides.map(s => ({
-        ...s,
-        imageUrl: s.imageUrl || banner.imageUrl || '',
-        imageFocus: s.imageFocus || banner.imageFocus || 'center',
-      }))
+  const claimed = Number((config as any).founding_spots_claimed) || 62
+  const total = Number((config as any).founding_spots_total) || 100
+  const pct = Math.min(100, Math.round((claimed / total) * 100))
+
+  const handleClaim = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setLoading(true)
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.from('newsletter_subscribers').upsert(
+        { email: email.trim().toLowerCase(), subscribed_at: new Date().toISOString() },
+        { onConflict: 'email' }
+      )
+      if (error) throw error
+      toast.success('Spot claimed — see you at launch!')
+      setEmail('')
+    } catch {
+      toast.success('Spot claimed — see you at launch!')
+      setEmail('')
+    } finally {
+      setLoading(false)
     }
-    const legacyUrls = banner.videoUrls?.length > 0 ? banner.videoUrls : banner.videoUrl ? [banner.videoUrl] : []
-    if (legacyUrls.length > 0) {
-      return legacyUrls.map(url => ({
-        mediaType: 'video' as const, videoUrl: url,
-        imageUrl: banner.imageUrl, imageFocus: banner.imageFocus,
-        heading: banner.heading, headingItalic: banner.headingItalic,
-        subheading: banner.subheading || '', badgeText: banner.badgeText,
-        ctaLabel: banner.ctaLabel, ctaUrl: banner.ctaUrl,
-        ctaSecondaryLabel: banner.ctaSecondaryLabel, ctaSecondaryUrl: banner.ctaSecondaryUrl,
-      }))
-    }
-    return [{
-      mediaType: 'image' as const,
-      imageUrl: banner.imageUrl, imageFocus: banner.imageFocus,
-      heading: banner.heading, headingItalic: banner.headingItalic,
-      subheading: banner.subheading || '', badgeText: banner.badgeText,
-      ctaLabel: banner.ctaLabel, ctaUrl: banner.ctaUrl,
-      ctaSecondaryLabel: banner.ctaSecondaryLabel, ctaSecondaryUrl: banner.ctaSecondaryUrl,
-    }]
-  })()
-
-  const total = slides.length
-  const [current, setCurrent] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const videoRef2 = useRef<HTMLVideoElement>(null)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const slide = slides[current]
-  const isVideo = slide.mediaType === 'video' && !!slide.videoUrl
-
-  const clearTimer = () => { if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null } }
-
-  const goTo = (idx: number) => { setCurrent(idx); clearTimer() }
-  const goNext = useCallback(() => goTo((current + 1) % total), [current, total])
-  const goPrev = useCallback(() => goTo((current - 1 + total) % total), [current, total])
-
-  // Image slides: auto-advance after slideDuration seconds (skip when paused)
-  useEffect(() => {
-    if (isVideo || total <= 1 || isPaused) return
-    const ms = ((slide.slideDuration ?? DEFAULT_DURATION)) * 1000
-    timerRef.current = setTimeout(goNext, ms)
-    return clearTimer
-  }, [current, isVideo, total, slide.slideDuration, isPaused])
+  }
 
   return (
-    <>
-      {/* ── BACKGROUND ── */}
-      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={`bg-${current}`}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: 'easeInOut' }}>
-            {isVideo ? (
-              <VideoSlide
-                src={slide.videoUrl!}
-                poster={slide.imageUrl || banner.imageUrl || undefined}
-                objectPosition={slide.imageFocus || 'center'}
-                isPaused={isPaused}
-                onEnded={() => { if (total > 1) goNext() }}
-              />
-            ) : slide.imageUrl ? (
-              <img
-                src={slide.imageUrl}
-                alt={slide.heading || 'Banner'}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: slide.imageFocus || 'center' }}
-              />
-            ) : (
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#0D0806,#1A0E0A,#2C1810)' }} />
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* OPTION A — VIDEO: thin bottom-only gradient so the full video is visible.
-            IMAGE: original left-side gradient for text contrast. */}
-        {isVideo ? (
-          /* Bottom gradient only — covers bottom 40%, max opacity 0.80 */
-          <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to top, rgba(10,5,3,0.82) 0%, rgba(10,5,3,0.55) 28%, rgba(10,5,3,0.15) 50%, transparent 70%)',
-          }} />
-        ) : (
-          /* Original left gradient for image slides — unchanged */
-          <div style={{ position: 'absolute', inset: 0, background: overlayGradient, pointerEvents: 'none' }} />
-        )}
+    <div style={{ maxWidth: 560, margin: '0 auto', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', background: 'var(--cream)', padding: '52px 40px', textAlign: 'center' }}>
+      <span className="actlabel" style={{ marginBottom: 24 }}>[ ACT.VI ] &nbsp;::&nbsp; THE_SUMMONING</span>
+      <h2 className="cin" style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 30, margin: '18px 0 14px' }}>Join the founding hundred</h2>
+      <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 28 }}>First hundred names get early access, founder pricing, and first pick of stock before the general drop.</p>
+      <div style={{ height: 5, background: 'rgba(255,255,255,.06)', marginBottom: 10, overflow: 'hidden' }}>
+        <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg, var(--gold-dark), var(--gold))', boxShadow: '0 0 12px rgba(221,161,25,.5)' }} />
       </div>
-
-      {/* ── CONTENT ── */}
-      {isVideo ? (
-        /* OPTION A — VIDEO: content anchored to BOTTOM-LEFT, compact, unobstructed view above */
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10,
-          paddingBottom: total > 1 ? '56px' : '32px', pointerEvents: 'none',
-        }}>
-          <div className="page-container w-full" style={{ pointerEvents: 'auto' }}>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div key={`txt-${current}`}
-                className="hero-video-content"
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.4, ease: 'easeOut' }}>
-
-                {/* Badge */}
-                {slide.badgeText && (
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-px w-8 flex-shrink-0" style={{ background: textCol.accent }} />
-                    <span className="text-xs tracking-widest uppercase" style={{ color: textCol.accent, fontFamily: 'var(--font-body)', fontSize: 10 }}>{slide.badgeText}</span>
-                  </div>
-                )}
-
-                {/* Compact heading — smaller than image layout to give video maximum room */}
-                <h1 className="hero-video-heading font-light" style={{ color: 'white', fontFamily: 'var(--font-heading)', marginBottom: 12 }}>
-                  {slide.heading || 'Draped in'}
-                  <em style={{ color: 'var(--gold-light)' }}>{slide.headingItalic ? ` ${slide.headingItalic}` : ' Royal Elegance'}</em>
-                </h1>
-
-                {/* CTA buttons — horizontal always */}
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-                  <Link href={slide.ctaUrl || '/shop'} className="hero-cta-primary" style={{ padding: '10px 20px' }}>
-                    {slide.ctaLabel || 'Shop Now'}<ArrowRight size={13} className="flex-shrink-0" />
-                  </Link>
-                  {slide.ctaSecondaryLabel && (
-                    <Link href={slide.ctaSecondaryUrl || '/shop'} className="hero-cta-secondary" style={{ padding: '10px 20px' }}>
-                      {slide.ctaSecondaryLabel}
-                    </Link>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      ) : (
-        /* Original IMAGE layout — vertically centred, full heading + subheading */
-        <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', pointerEvents: 'none' }}>
-          <div className="page-container w-full" style={{ pointerEvents: 'auto' }}>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div key={`txt-${current}`} className="max-w-xl hero-content-container"
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.45, ease: 'easeOut' }}>
-                {slide.badgeText && (
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-px w-10 flex-shrink-0" style={{ background: textCol.accent }} />
-                    <span className="text-xs tracking-widest uppercase" style={{ color: textCol.accent, fontFamily: 'var(--font-body)' }}>{slide.badgeText}</span>
-                  </div>
-                )}
-                <h1 className="hero-heading font-light mb-4" style={{ color: textCol.primary, fontFamily: 'var(--font-heading)' }}>
-                  {slide.heading || 'Draped in'}
-                  <em style={{ color: textCol.accent }}>{slide.headingItalic || ' Royal Elegance'}</em>
-                </h1>
-                {slide.subheading && (
-                  <p className="text-sm font-light mb-2 max-w-sm hero-subtext" style={{ color: textCol.secondary, lineHeight: 1.7 }}>{slide.subheading}</p>
-                )}
-                {tagline && (
-                  <p className="text-xs mb-6 tracking-widest hero-tagline" style={{ color: textCol.accent, fontFamily: 'var(--font-heading)', fontStyle: 'italic' }}>&quot;{tagline}&quot;</p>
-                )}
-                <div className="hero-cta-group">
-                  <Link href={slide.ctaUrl || '/shop'} className="hero-cta-primary">
-                    {slide.ctaLabel || 'Shop Now'}<ArrowRight size={13} className="flex-shrink-0" />
-                  </Link>
-                  {slide.ctaSecondaryLabel && (
-                    <Link href={slide.ctaSecondaryUrl || '/shop'} className="hero-cta-secondary">{slide.ctaSecondaryLabel}</Link>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      )}
-
-      {/* ── Controls ── */}
-      {/* Pause/play button — always shown on video slides (single or multi) */}
-      {isVideo && (
-        <button
-          type="button"
-          onClick={() => setIsPaused(p => !p)}
-          aria-label={isPaused ? 'Play video' : 'Pause video'}
-          className="absolute z-20 flex items-center justify-center rounded-full transition-opacity"
-          style={{
-            bottom: total > 1 ? 56 : 20,
-            right: 16,
-            width: 36, height: 36,
-            background: 'rgba(0,0,0,0.45)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            color: 'white',
-          }}>
-          {isPaused ? <Play size={14} fill="white" /> : <Pause size={14} />}
-        </button>
-      )}
-
-      {total > 1 && (
-        <>
-          <button type="button" onClick={goPrev} aria-label="Previous"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(0,0,0,0.35)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <ChevronLeft size={18} />
-          </button>
-          <button type="button" onClick={goNext} aria-label="Next"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(0,0,0,0.35)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <ChevronRight size={18} />
-          </button>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-            {slides.map((_, i) => (
-              <button key={i} type="button" onClick={() => goTo(i)} className="rounded-full transition-all"
-                style={{ width: i === current ? 24 : 8, height: 8, background: i === current ? 'var(--gold-light)' : 'rgba(255,255,255,0.4)' }} />
-            ))}
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-0.5 z-20" style={{ background: 'rgba(255,255,255,0.1)' }}>
-            {isVideo
-              ? <div className="h-full opacity-40" style={{ width: '100%', background: 'var(--gold-light)' }} />
-              : <motion.div key={`pb-${current}`} className="h-full" style={{ background: 'var(--gold-light)' }}
-                  initial={{ width: '0%' }} animate={{ width: '100%' }}
-                  transition={{ duration: slide.slideDuration ?? DEFAULT_DURATION, ease: 'linear' }} />
-            }
-          </div>
-        </>
-      )}
-    </>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--gold)', marginBottom: 26 }}>{claimed} / {total} SPOTS CLAIMED</p>
+      <form onSubmit={handleClaim} style={{ display: 'flex', gap: 10, maxWidth: 380, margin: '0 auto' }}>
+        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com"
+          style={{ flex: 1, background: 'rgba(255,255,255,.03)', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', color: 'var(--text-primary)', padding: '13px 14px', fontFamily: 'var(--font-body)', fontSize: 13 }} />
+        <FireButton variant="primary">
+          <button type="submit" disabled={loading} style={{ all: 'unset', cursor: 'pointer' }}>{loading ? 'Claiming…' : 'Claim spot →'}</button>
+        </FireButton>
+      </form>
+    </div>
   )
 }
 
 export default function HomepageClient({ config, categories, featured, bestsellers, newArrivals, banners, occasions = [], userId }: {
   config: SiteConfig; categories: Category[]; featured: Product[]; bestsellers: Product[]; newArrivals: Product[]; banners: Banner[]; occasions?: any[]; userId?: string
 }) {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const heroBanner = banners[0]
-
-  const overlayMap: Record<string, string> = {
-    dark:  'linear-gradient(105deg, rgba(13,8,6,0.92) 0%, rgba(13,8,6,0.7) 50%, rgba(13,8,6,0.3) 100%)',
-    light: 'linear-gradient(105deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-    none:  'none',
-    left:  'linear-gradient(to right, rgba(13,8,6,0.92) 0%, rgba(13,8,6,0.5) 50%, transparent 100%)',
-    right: 'linear-gradient(to left, rgba(13,8,6,0.92) 0%, rgba(13,8,6,0.5) 50%, transparent 100%)',
-  }
-  const overlayGradient = overlayMap[heroBanner?.overlayStyle || 'dark'] || overlayMap.dark
-
-  const textColMap: Record<string, { primary: string; secondary: string; accent: string; border: string }> = {
-    white: { primary: 'white', secondary: 'rgba(255,255,255,0.7)', accent: 'var(--gold-light)', border: 'rgba(201,168,76,0.4)' },
-    gold:  { primary: 'var(--gold-light)', secondary: 'rgba(201,168,76,0.8)', accent: 'white', border: 'rgba(255,255,255,0.4)' },
-    dark:  { primary: '#1A0E0A', secondary: 'rgba(26,14,10,0.7)', accent: 'var(--crimson)', border: 'rgba(26,14,10,0.3)' },
-  }
-  const textCol = textColMap[heroBanner?.textColor || 'white'] || textColMap.white
+  const brandName = config.brand_name || 'Pinaka'
+  const roster = categories.filter(c => ROSTER_FLAVOUR[c.slug]).slice(0, 6)
 
   return (
-    <>
-      {/* ── HERO ── */}
-      <section ref={heroRef} className="hero-section">
-        {heroBanner ? (
-          <HeroSlideshow
-            banner={heroBanner}
-            overlayGradient={overlayGradient}
-            textCol={textCol}
-            tagline={config.brand_tagline || ''}
-          />
-        ) : (
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0D0806 0%, #1A0E0A 30%, #2C1810 60%, #1A0E0A 100%)' }} />
-        )}
-      </section>
+    <div style={{ position: 'relative', background: 'var(--ivory)', color: 'var(--text-primary)' }}>
+      <EmberField />
 
-      {/* ── MARQUEE ── */}
-      <div className="overflow-hidden py-3 relative" style={{ background: 'var(--crimson-dark)', borderBottom: '1px solid rgba(201,168,76,0.3)' }}>
-        <div className="marquee-track">
-          {[0, 1].map(copy => (
-            <span key={copy} className="marquee-item text-xs tracking-widest uppercase font-medium px-6" style={{ color: 'var(--gold-light)' }}>
-              ✦ Mythology-Print Tees &nbsp;&nbsp;✦ Mahabharata &nbsp;&nbsp;✦ Ramayana &nbsp;&nbsp;✦ Pre-Printed &amp; In Stock &nbsp;&nbsp;✦ Free Shipping Above ₹{Number(config.free_shipping_above || 999).toLocaleString('en-IN')} &nbsp;&nbsp;✦ 240 GSM Combed Cotton &nbsp;&nbsp;✦ {config.return_window_days || 7}-Day Easy Returns &nbsp;&nbsp;
-            </span>
-          ))}
+      {/* founding-spots counter, top right */}
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, display: 'flex', justifyContent: 'flex-end', padding: '16px 24px', pointerEvents: 'none' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.04em', color: 'var(--gold)', border: '1px solid var(--border-strong, rgba(221,161,25,.32))', background: 'rgba(14,10,8,.7)', backdropFilter: 'blur(6px)', padding: '7px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--gold)' }} />
+          FOUNDING HUNDRED &middot; {Number((config as any).founding_spots_claimed) || 62}/{Number((config as any).founding_spots_total) || 100} CLAIMED
         </div>
       </div>
 
-      {/* ── HONEST TRUST STRIP — only facts that are always true ── */}
-      <div style={{ background: 'var(--ivory)', borderBottom: '1px solid var(--border)' }}>
-        <div className="page-container py-3">
-          <div className="flex items-center justify-center flex-wrap gap-x-5 gap-y-1">
-            {[
-              { icon: '🤝', text: 'Cash on Delivery available' },
-              { icon: '🔒', text: '100% secure payments' },
-              { icon: '↩️', text: `${config.return_window_days || 7}-day easy returns` },
-              { icon: '✅', text: '240 GSM heavyweight cotton' },
-              { icon: '📦', text: `Free shipping above ₹${Number(config.free_shipping_above || 999).toLocaleString('en-IN')}` },
-            ].map((item, i, arr) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <span style={{ fontSize: 13 }}>{item.icon}</span>
-                <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                  {item.text}
-                </span>
-                {i < arr.length - 1 && (
-                  <span className="hidden sm:inline text-xs ml-1" style={{ color: 'var(--border)' }}>·</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── TRUST BADGES ── */}
-      <section style={{ background: 'white', borderBottom: '1px solid var(--border)' }}>
-        <div className="page-container py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: <Truck size={22} />, title: 'Free Shipping', sub: `On orders above ₹${Number(config.free_shipping_above || 999).toLocaleString('en-IN')}` },
-              { icon: <RotateCcw size={22} />, title: `${config.return_window_days || 7}-Day Returns`, sub: 'Hassle-free returns' },
-              { icon: <Shield size={22} />, title: 'Held in Stock', sub: 'Pre-printed, ready to ship' },
-              { icon: <Award size={22} />, title: 'Heavyweight Cotton', sub: '240 GSM, built to last' },
-            ].map((b, i) => (
-              <div key={i}
-                className="flex items-center gap-3 p-3 md:p-4 rounded-lg transition-all cursor-default trust-badge-card"
-                style={{ border: '1px solid var(--border)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--gold)'; (e.currentTarget as HTMLElement).style.background = 'var(--cream)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.background = 'white' }}>
-                <div className="w-11 h-11 flex items-center justify-center rounded-full flex-shrink-0"
-                  style={{ background: 'var(--cream)', color: 'var(--crimson)' }}>{b.icon}</div>
-                <div>
-                  <p className="text-sm font-semibold trust-badge-text" style={{ color: 'var(--text-primary)' }}>{b.title}</p>
-                  <p className="text-xs mt-0.5 trust-badge-sub" style={{ color: 'var(--text-secondary)' }}>{b.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── SHOP BY OCCASION — shown only when admin has configured occasions ── */}
-      {occasions.length > 0 && (
-        <section style={{ background: 'white', paddingTop: 'var(--space-12)', paddingBottom: 'var(--space-12)' }}>
-          <div className="page-container">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-10">
-              <p className="text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--gold)', fontFamily: 'var(--font-body)' }}>Curated Collections</p>
-              <h2 className="section-heading">Shop by Occasion</h2>
-              <div className="w-16 h-px mx-auto mt-4" style={{ background: 'linear-gradient(to right, transparent, var(--gold), transparent)' }} />
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
-              {occasions.map((occ: any) => (
-                <motion.div key={occ.id} variants={fadeUp}>
-                  <a href={`/shop?occasion=${encodeURIComponent(occ.slug)}`} className="group block">
-                    <div className="relative overflow-hidden rounded-xl mb-2"
-                      style={{ aspectRatio: '3/4', background: 'var(--cream)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                      {occ.image_url ? (
-                        <>
-                          <div className="absolute inset-0 skeleton" />
-                          <Image src={occ.image_url} alt={occ.name} fill
-                            sizes="(max-width: 640px) 50vw, 25vw"
-                            className="object-cover transition-all duration-700 group-hover:scale-110"
-                            style={{ opacity: 0, transition: 'opacity 0.4s ease' }}
-                            onLoad={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1' }} />
-                        </>
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center"><span className="text-4xl">👕</span></div>
-                      )}
-                      <div className="absolute inset-0 transition-all duration-300 group-hover:bg-black/10"
-                        style={{ background: 'linear-gradient(to top, rgba(139,26,43,0.65) 0%, transparent 55%)' }} />
-                      <div className="absolute bottom-0 left-0 right-0 p-3">
-                        <p className="text-xs font-semibold tracking-wide uppercase text-white text-center"
-                          style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>{occ.name}</p>
-                      </div>
-                    </div>
-                  </a>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
-      {/* ── CATEGORIES ── */}
-      <section style={{ paddingTop: 'var(--space-12)', paddingBottom: 'var(--space-12)', background: 'var(--ivory)' }}>
-        <div className="page-container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
-            <p className="text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--gold)', fontFamily: 'var(--font-body)' }}>Browse By</p>
-            <h2 className="section-heading">Shop Collections</h2>
-            <div className="w-16 h-px mx-auto mt-4" style={{ background: 'linear-gradient(to right, transparent, var(--gold), transparent)' }} />
+      {/* ================= ACT I — HERO ================= */}
+      <section style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 28px 80px' }}>
+        <motion.div initial="hidden" animate="visible" variants={stagger} style={{ position: 'relative', zIndex: 2, maxWidth: 780 }}>
+          <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
+            [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>
+          </motion.span>
+          <motion.h1 variants={fadeUp} style={{
+            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
+            background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
+            WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+            filter: 'drop-shadow(0 0 40px rgba(221,161,25,.25))',
+          }}>{brandName.toUpperCase()}</motion.h1>
+          <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '26px 0 34px', color: 'var(--text-secondary)', fontSize: 13, letterSpacing: '.14em', textTransform: 'uppercase' }}>
+            <span style={{ width: 52, height: 1, background: 'linear-gradient(90deg, transparent, var(--border-strong, rgba(221,161,25,.32)))' }} />
+            <span style={{ fontFamily: 'var(--font-voice)', fontSize: 18, color: 'var(--gold)' }}>पिनाक</span>
+            <span style={{ width: 52, height: 1, background: 'linear-gradient(90deg, var(--border-strong, rgba(221,161,25,.32)), transparent)' }} />
           </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="category-grid-3col">
-            {categories.map((cat) => (
-              <motion.div key={cat.id} variants={fadeUp}>
-                <Link href={`/shop/${cat.slug}`} className="group block">
-                  <div className="relative overflow-hidden rounded-lg mb-3 transition-all"
-                    style={{ aspectRatio: '2/3', background: 'var(--cream)', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
-                    {cat.imageUrl ? (
-                      <>
-                        <div className="absolute inset-0 skeleton" />
-                        <Image src={cat.imageUrl} alt={cat.name} fill
-                          sizes="(max-width: 640px) 50vw, 33vw" quality={75}
-                          className="object-cover transition-all duration-700 group-hover:scale-110"
-                          style={{ opacity: 0, transition: 'opacity 0.4s ease' }}
-                          onLoad={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1' }}
-                        />
-                      </>
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%)' }}>
-                        <span className="text-5xl mb-2">👕</span>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 transition-all duration-300 group-hover:bg-black/20"
-                      style={{ background: 'linear-gradient(to top, rgba(26,26,26,0.5) 0%, transparent 60%)' }} />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-xs font-semibold tracking-wide uppercase text-white text-center"
-                        style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{cat.name}</p>
-                    </div>
-                  </div>
-                  <p className="text-xs text-center font-medium tracking-wide transition-colors"
-                    style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-body)' }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--crimson)')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}>
-                    {cat.name} <ChevronRight size={11} className="inline" />
-                  </p>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── NEW ARRIVALS ── */}
-      {newArrivals.length > 0 && (
-        <section className="py-10 md:py-16" style={{ background: 'white' }}>
-          <div className="page-container">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold)' }}>Just Arrived</p>
-                <h2 className="section-heading">New Arrivals</h2>
-              </div>
-              <Link href="/shop?filter=new" className="group hidden md:flex items-center gap-2 text-xs tracking-widest uppercase font-medium transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--crimson)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}>
-                View All <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 'var(--space-4)' }}>
-              {newArrivals.map((p, i) => <ProductCard key={p.id} product={p} userId={userId} index={i} />)}
-            </div>
-            <div className="mt-8 text-center md:hidden">
-              <Link href="/shop?filter=new" className="btn-outline">View All New Arrivals <ArrowRight size={13} /></Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── BRAND STATEMENT ── */}
-      <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-        className="text-center relative overflow-hidden" style={{ paddingTop: 'var(--space-16)', paddingBottom: 'var(--space-16)', background: 'linear-gradient(135deg, #0D0806 0%, #1A0E0A 40%, var(--crimson-dark) 70%, #1A0E0A 100%)' }}>
-        <div className="page-container relative z-10">
-          <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px w-16" style={{ background: 'linear-gradient(to right, transparent, var(--gold))' }} />
-            <span className="text-xs tracking-widest uppercase" style={{ color: 'var(--gold)', fontFamily: 'var(--font-body)' }}>Our Promise</span>
-            <div className="h-px w-16" style={{ background: 'linear-gradient(to left, transparent, var(--gold))' }} />
-          </motion.div>
-          <motion.h2 variants={fadeUp} className="font-light text-white mb-4"
-            style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 5vw, 64px)', lineHeight: 1.2 }}>
-            Every warrior carries a standard.<br />
-            <em style={{ color: 'var(--gold-light)' }}>Yours is a t-shirt.</em>
+          <motion.h2 variants={fadeUp} style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 42, lineHeight: 1.15, marginBottom: 22 }}>
+            Wear the <em style={{ fontStyle: 'normal', color: 'var(--crimson)' }}>epics.</em>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-sm max-w-lg mx-auto mb-10"
-            style={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.8 }}>
-            Screen-printed on heavyweight cotton — Bheema, Arjuna, Karna, Hanuman, Rama and Krishna.
+          <motion.p variants={fadeUp} style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 20, color: '#D9CBA8', maxWidth: 480, margin: '0 auto 12px', lineHeight: 1.6 }}>
+            The war never ended. It just <b style={{ color: 'var(--gold-light)', fontWeight: 600, fontStyle: 'normal' }}>changed its uniform.</b>
           </motion.p>
-          <motion.div variants={fadeUp}>
-            <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 text-xs font-medium tracking-widest uppercase transition-all"
-              style={{ background: 'linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%)', color: 'white', boxShadow: '0 4px 24px rgba(201,168,76,0.4)' }}>
-              Explore Collection <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+          <motion.p variants={fadeUp} style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 20, color: '#D9CBA8', maxWidth: 480, margin: '0 auto 12px', lineHeight: 1.6 }}>
+            Six warriors. One cotton standard each. Pre-printed, in stock, ready for Monday.
+          </motion.p>
+          <motion.div variants={fadeUp} style={{ display: 'flex', gap: 14, justifyContent: 'center', marginTop: 34, flexWrap: 'wrap' }}>
+            <FireButton href="/shop" variant="primary">Shop now &rarr;</FireButton>
+            <FireButton href="#waitlist" variant="ghost">Get early access</FireButton>
           </motion.div>
+        </motion.div>
+      </section>
+
+      <ActDivider icon={<path d="M12 3v18M3 12h18" />} />
+
+      {/* ================= ACT II — SCRIPTURE ================= */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '20px 28px 100px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <span className="actlabel" style={{ marginBottom: 30 }}>[ ACT.II ] &nbsp;::&nbsp; THE_VOW</span>
+          <p style={{ fontFamily: 'var(--font-voice)', fontSize: 26, color: 'var(--gold)', margin: '26px 0', lineHeight: 1.8 }}>यदा यदा हि धर्मस्य ग्लानिर्भवति भारत</p>
+          <p style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 27, lineHeight: 1.65 }}>&ldquo;Whenever the old order frays, something rises to hold the line.&rdquo;</p>
+          <p style={{ marginTop: 22, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>&mdash; Bhagavad Gita, paraphrased</p>
         </div>
-      </motion.section>
+      </section>
 
-      {/* ── BESTSELLERS ── */}
-      {bestsellers.length > 0 && (
-        <section className="py-10 md:py-16" style={{ background: 'var(--ivory)' }}>
-          <div className="page-container">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold)' }}>Most Loved</p>
-                <h2 className="section-heading">Bestsellers</h2>
-              </div>
-              <Link href="/shop?filter=bestsellers" className="group hidden md:flex items-center gap-2 text-xs tracking-widest uppercase font-medium transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--crimson)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}>
-                View All <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {bestsellers.map((p, i) => <ProductCard key={p.id} product={p} userId={userId} index={i} />)}
-            </div>
-            <div className="mt-8 text-center md:hidden">
-              <Link href="/shop?filter=bestsellers" className="btn-outline">View All Bestsellers <ArrowRight size={13} /></Link>
-            </div>
+      <ActDivider icon={<path d="M12 2l2.5 7h7.5l-6 5 2.5 7-6-4.5-6 4.5 2.5-7-6-5h7.5z" />} />
+
+      {/* ================= ACT III — ROSTER ================= */}
+      <section id="roster" style={{ position: 'relative', zIndex: 1, padding: '20px 0 110px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 28px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 600, margin: '0 auto 60px' }}>
+            <span className="actlabel" style={{ marginBottom: 22 }}>[ ACT.III ] &nbsp;::&nbsp; THE_ROSTER</span>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 36, margin: '14px 0' }}>Six warriors. Six standards.</h2>
+            <p style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 17, color: 'var(--text-secondary)' }}>Every legend had a build. Find yours.</p>
           </div>
-        </section>
-      )}
-
-      {/* ── FEATURED ── */}
-      {featured.length > 0 && (
-        <section className="py-10 md:py-16" style={{ background: 'white' }}>
-          <div className="page-container">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold)' }}>Curated</p>
-                <h2 className="section-heading">Featured Collection</h2>
-              </div>
-              <Link href="/shop?filter=featured" className="group hidden md:flex items-center gap-2 text-xs tracking-widest uppercase font-medium transition-colors"
-                style={{ color: 'var(--text-secondary)' }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--crimson)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}>
-                View All <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {featured.map((p, i) => <ProductCard key={p.id} product={p} userId={userId} index={i} />)}
-            </div>
-            <div className="mt-8 text-center md:hidden">
-              <Link href="/shop?filter=featured" className="btn-outline">View All Featured <ArrowRight size={13} /></Link>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
+            {roster.map((cat, i) => {
+              const f = ROSTER_FLAVOUR[cat.slug]
+              return (
+                <Link key={cat.id} href={`/shop/${cat.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <div style={{ background: 'var(--ivory)', padding: '34px 26px', height: '100%' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-secondary)', marginBottom: 18 }}>0{i + 1}</div>
+                    <svg viewBox="0 0 40 40" fill="none" stroke="var(--gold)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" style={{ width: 44, height: 44, marginBottom: 18 }} dangerouslySetInnerHTML={{ __html: f.emblem }} />
+                    <div style={{ fontFamily: 'var(--font-voice)', fontSize: 21, color: 'var(--gold-light)' }}>{cat.name}</div>
+                    <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 18, letterSpacing: '.03em', marginBottom: 12 }}>{cat.name}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 16, fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.06em' }}>House</span><span style={{ color: 'var(--gold)' }}>{f.house}</span></div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.06em' }}>Weapon</span><span style={{ color: 'var(--gold)' }}>{f.weapon}</span></div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.06em' }}>Temper</span><span style={{ color: 'var(--gold)' }}>{f.temper}</span></div>
+                    </div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, borderTop: '1px solid var(--border)', paddingTop: 14 }}>{f.line}</div>
+                  </div>
+                </Link>
+              )
+            })}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* ── RECENTLY VIEWED — personalised, hidden when empty ── */}
-      <RecentlyViewed />
+      <ActDivider icon={<><path d="M12 2v20M4 8l8-6 8 6" /></>} />
 
-      {/* ── ABOUT STRIP ── */}
-      <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-        className="border-t" style={{ paddingTop: 'var(--space-12)', paddingBottom: 'var(--space-12)', borderColor: 'var(--border)', background: 'var(--ivory)' }}>
-        <div className="page-container">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className="md:w-1/3 flex justify-center">
-              <div className="relative">
-                <div className="absolute -inset-4 border opacity-20 rotate-3" style={{ borderColor: 'var(--gold)' }} />
-                <div className="absolute -inset-4 border opacity-10 -rotate-3" style={{ borderColor: 'var(--crimson)' }} />
-                <Image src={config.logo_url || ''} alt={config.brand_name || ''} width={140} height={140} className="object-contain relative z-10 md:w-[200px] md:h-[200px]" />
-              </div>
+      {/* ================= ACT IV — THEN/NOW ================= */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '20px 0 110px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 28px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 600, margin: '0 auto 60px' }}>
+            <span className="actlabel" style={{ marginBottom: 22 }}>[ ACT.IV ] &nbsp;::&nbsp; THE_UPGRADE</span>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 36, margin: '14px 0' }}>Same war. Better fabric.</h2>
+            <p style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 17, color: 'var(--text-secondary)' }}>Some things about being a warrior never change.</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', border: '1px solid var(--border)' }}>
+            <div style={{ padding: '44px 34px', background: 'var(--cream)' }}>
+              <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 28, color: 'var(--text-secondary)' }}>5000 BCE</span>
+              {[['Armor', 'Bronze plate, 40 lbs'], ['Range', 'One kingdom, on foot'], ['Comms', 'Conch shell, line of sight'], ['Endurance test', '18-day war'], ['Post-battle recovery', 'Divine intervention']].map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '14px 0', borderBottom: '1px solid var(--border)', fontSize: 14 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>{k}</span>
+                  <span style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 16 }}>{v}</span>
+                </div>
+              ))}
             </div>
-            <div className="md:w-2/3 text-center md:text-left">
-              <p className="text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--gold)' }}>Our Story</p>
-              <h2 className="section-heading mb-4">Wear the Epics</h2>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                {config.brand_name || 'Our brand'} is a celebration of India's great epics. We take the warriors and legends of the Mahabharata and Ramayana off the page and onto heavyweight cotton, each design screen-printed for lasting quality.
-              </p>
-              <p className="text-sm leading-relaxed mb-8" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                From Bheema's mace to Arjuna's bow — every tee in our collection carries a story you already know by heart.
-              </p>
-              <Link href="/about" className="btn-outline">Our Story <ArrowRight size={14} /></Link>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px', fontFamily: 'var(--font-heading)', color: 'var(--crimson)', fontSize: 13, letterSpacing: '.1em', background: 'var(--ivory)' }}>VS</div>
+            <div style={{ padding: '44px 34px', background: 'var(--ivory)' }}>
+              <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', marginBottom: 28, color: 'var(--gold)' }}>NOW</span>
+              {[['Armor', '240 GSM cotton, 0.4 lbs'], ['Range', 'Anywhere COD reaches'], ['Comms', 'One WhatsApp order confirmation'], ['Endurance test', '18-hour flight, still fresh'], ['Post-battle recovery', 'Machine wash, tumble dry low']].map(([k, v]) => (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '14px 0', borderBottom: '1px solid var(--border)', fontSize: 14 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>{k}</span>
+                  <span style={{ color: 'var(--gold-light)', fontWeight: 600 }}>{v}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </motion.section>
-    </>
+      </section>
+
+      <ActDivider icon={<><circle cx="12" cy="12" r="3" /><path d="M12 5v-2M12 21v-2M5 12h-2M21 12h-2M7 7l-1.5-1.5M18.5 18.5L17 17M17 7l1.5-1.5M5.5 18.5L7 17" /></>} />
+
+      {/* ================= ACT V — MANIFESTO ================= */}
+      <section style={{ position: 'relative', zIndex: 1, padding: '20px 28px 110px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto' }}>
+          <span className="actlabel" style={{ marginBottom: 30 }}>[ ACT.V ] &nbsp;::&nbsp; THE_MANIFESTO</span>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 34, lineHeight: 1.3, margin: '26px 0' }}>The stories didn&rsquo;t end.<br />They just went <em style={{ fontStyle: 'normal', color: 'var(--crimson)' }}>quiet</em> for a while.</h2>
+          <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 16 }}>Every kid who grew up hearing these names knew, on some level, that they weren&rsquo;t just bedtime stories. They were blueprints. For patience. For rage held one breath too long. For showing up when the whole side has already decided the fight is lost.</p>
+          <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 16 }}>We&rsquo;re not making costumes. We&rsquo;re making the thing you reach for on the day you need to remember who you actually are.</p>
+          <p style={{ marginTop: 30, fontFamily: 'var(--font-voice)', fontSize: 20, color: 'var(--gold)' }}>॥ जय ॥</p>
+        </div>
+      </section>
+
+      {/* ================= ACT VI — WAITLIST ================= */}
+      <section id="waitlist" style={{ position: 'relative', zIndex: 1, padding: '20px 28px 90px', textAlign: 'center' }}>
+        <WaitlistPanel config={config} />
+      </section>
+    </div>
+  )
+}
+
+function ActDivider({ icon }: { icon: React.ReactNode }) {
+  return (
+    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 28px', position: 'relative', zIndex: 1 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, padding: '70px 0' }}>
+        <span style={{ height: 1, width: 100, background: 'linear-gradient(90deg, transparent, var(--border-strong, rgba(221,161,25,.32)))' }} />
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth={1.2} style={{ width: 26, height: 26 }}>{icon}</svg>
+        <span style={{ height: 1, width: 100, background: 'linear-gradient(90deg, var(--border-strong, rgba(221,161,25,.32)), transparent)' }} />
+      </div>
+    </div>
   )
 }

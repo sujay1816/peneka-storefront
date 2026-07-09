@@ -9,7 +9,7 @@ import { getSiteConfig, getCategories, getProductsSimple, getBanners } from '@/l
 // User session is loaded client-side in Navbar (already has useEffect for this).
 export const revalidate = 60
 
-const DEFAULT_CONFIG = { brand_name: process.env.NEXT_PUBLIC_BRAND_NAME || 'Peneka', brand_tagline: 'Wear the Epics.', brand_subtitle: 'MAHABHARATA · RAMAYANA · WORN', whatsapp_number: '', support_email: '', business_email: '', free_shipping_above: '999', default_shipping_charge: '79', estimated_delivery_days: '1-3', return_window_days: '7', default_gst_rate: '5', cod_enabled: 'true', upi_enabled: 'true', razorpay_key_id: '', instagram_url: '', facebook_url: '', youtube_url: '', gstin: '', business_address: '', new_arrivals_days: '30', low_stock_threshold: '5' }
+const DEFAULT_CONFIG = { brand_name: process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka', brand_tagline: 'Wear the Epics.', brand_subtitle: 'MAHABHARATA · RAMAYANA · WORN', whatsapp_number: '', support_email: '', business_email: '', free_shipping_above: '999', default_shipping_charge: '79', estimated_delivery_days: '1-3', return_window_days: '7', default_gst_rate: '5', cod_enabled: 'true', upi_enabled: 'true', razorpay_key_id: '', instagram_url: '', facebook_url: '', youtube_url: '', gstin: '', business_address: '', new_arrivals_days: '30', low_stock_threshold: '5' }
 
 export default async function HomePage() {
   // Lazy import supabase to avoid breaking ISR

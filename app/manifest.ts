@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 // FIX: Brand name was hardcoded as 'RN Bros'. Now reads from env var.
 // Set NEXT_PUBLIC_BRAND_NAME in Vercel env vars to your actual brand name.
-const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Peneka'
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 const SHORT_NAME = process.env.NEXT_PUBLIC_BRAND_SHORT_NAME || 'SKSS'
 
 export default function manifest(): MetadataRoute.Manifest {

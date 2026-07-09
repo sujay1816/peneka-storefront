@@ -91,10 +91,10 @@ function LoginForm() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: '#0D0D0D', fontFamily: 'DM Sans, sans-serif' }}>
-      <div className="hidden lg:flex" style={{ width: '50%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #1A0510 0%, #2D0A1E 25%, #8B1A2B 50%, #C9A84C 70%, #2D0A1E 90%, #1A0510 100%)' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'repeating-linear-gradient(0deg, #C9A84C 0px, #C9A84C 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #C9A84C 0px, #C9A84C 2px, transparent 2px, transparent 20px)' }} />
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)' }} />
+      <div className="hidden lg:flex" style={{ width: '50%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #1A0510 0%, #2D0A1E 25%, #C1442F 50%, #DDA119 70%, #2D0A1E 90%, #1A0510 100%)' }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'repeating-linear-gradient(0deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px)' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
         <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 48, textAlign: 'center' }}>
           <div style={{ position: 'relative', marginBottom: 24 }}>
             <div style={{ position: 'absolute', inset: -32, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.3) 0%, transparent 70%)' }} />
@@ -103,8 +103,8 @@ function LoginForm() {
             : <div style={{ width: 90, height: 90, borderRadius: '50%', background: 'rgba(139,26,43,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: 'white', fontFamily: 'Cormorant Garamond, serif', position: 'relative' }}>S</div>}
           </div>
           <h1 style={{ fontSize: 48, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'Cormorant Garamond, serif' }}>{brandName}</h1>
-          <p style={{ color: '#C9A84C', fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: 20 }}>{`✦ ${brandSubtitle} ✦`}</p>
-          <div style={{ width: 80, height: 1, background: 'linear-gradient(to right, transparent, #C9A84C, transparent)', marginBottom: 20 }} />
+          <p style={{ color: '#DDA119', fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: 20 }}>{`✦ ${brandSubtitle} ✦`}</p>
+          <div style={{ width: 80, height: 1, background: 'linear-gradient(to right, transparent, #DDA119, transparent)', marginBottom: 20 }} />
           <p style={{ fontSize: 18, fontWeight: 300, fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', fontFamily: 'Cormorant Garamond, serif', lineHeight: 1.6 }}>
             "Pure Silk. Timeless Tradition.<br />Royal Elegance."
           </p>
@@ -141,16 +141,16 @@ function LoginForm() {
             <div>
               <label style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', display: 'block', marginBottom: 6 }}>Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" autoComplete="email"
-                style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #C9A84C'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
+                style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #DDA119'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
                 <label style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Password</label>
-                <Link href="/forgot-password" style={{ fontSize: 12, color: '#C9A84C', textDecoration: 'none' }}>Forgot?</Link>
+                <Link href="/forgot-password" style={{ fontSize: 12, color: '#DDA119', textDecoration: 'none' }}>Forgot?</Link>
               </div>
               <div style={{ position: 'relative' }}>
                 <input type={showPass ? 'text' : 'password'} aria-label="Password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" autoComplete="current-password"
-                  style={{ width: '100%', padding: '12px 44px 12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #C9A84C'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
+                  style={{ width: '100%', padding: '12px 44px 12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 16, outline: 'none' }} onFocus={e => e.currentTarget.style.boxShadow='0 0 0 2px #DDA119'} onBlur={e => e.currentTarget.style.boxShadow='none'} />
                 <button type="button" onClick={() => setShowPass(!showPass)}
                   style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}>
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -158,14 +158,14 @@ function LoginForm() {
               </div>
             </div>
             <button type="submit" disabled={loading}
-              style={{ width: '100%', padding: 13, background: 'linear-gradient(135deg, #8B1A2B 0%, #6B1220 100%)', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.6 : 1 }}>
+              style={{ width: '100%', padding: 13, background: 'linear-gradient(135deg, #C1442F 0%, #7A2A1D 100%)', color: 'white', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.6 : 1 }}>
               {loading
                 ? <><span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Signing in...</>
                 : <><span>Sign In</span><ArrowRight size={14} /></>}
             </button>
           </form>
           <p style={{ textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.4)', marginTop: 24 }}>
-            Don't have an account? <Link href="/signup" style={{ color: '#C9A84C', textDecoration: 'none', fontWeight: 500 }}>Create account</Link>
+            Don't have an account? <Link href="/signup" style={{ color: '#DDA119', textDecoration: 'none', fontWeight: 500 }}>Create account</Link>
           </p>
         </div>
       </div>
