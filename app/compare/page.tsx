@@ -105,7 +105,7 @@ export default function ComparePage() {
                       {!p.isOutOfStock && v && (
                         <button type="button"
                           onClick={() => {
-                            addItem({ productId: p.id, productName: p.name, productSlug: p.slug, productImage: img?.url || '', colour: v.colour, colourHex: v.colourHex, originalPrice: p.originalPrice, salePrice: p.salePrice, quantity: 1, stock: v.stock, gstRate: p.gstRate })
+                            addItem({ productId: p.id, productName: p.name, productSlug: p.slug, productImage: img?.url || '', colour: v.colour, colourHex: v.colourHex, size: v.size, originalPrice: p.originalPrice, salePrice: p.salePrice, quantity: 1, stock: v.stock, gstRate: p.gstRate })
                             toast.success('Added to cart!', { icon: '🛍️', className: 'toast-brand toast-success-brand' })
                           }}
                           className="flex items-center justify-center gap-1.5 w-full py-2 text-xs font-medium rounded mt-2"
