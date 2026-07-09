@@ -432,7 +432,7 @@ export default function CheckoutPage() {
                     placeholder="GSTIN (e.g. 22AAAAA0000A1Z5)"
                     className="input-base w-full"
                     maxLength={15}
-                    style={{ borderColor: gstinError ? 'var(--crimson)' : undefined, fontFamily: 'monospace', letterSpacing: '0.05em' }}
+                    style={{ borderColor: gstinError ? 'var(--crimson)' : undefined, fontFamily: 'var(--font-mono, monospace)', letterSpacing: '0.05em' }}
                     aria-label="GSTIN number"
                     autoComplete="off"
                   />

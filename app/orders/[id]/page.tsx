@@ -295,7 +295,7 @@ export default function OrderDetailPage() {
               <div>
                 <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Ship to our address</p>
                 {returnConfig.businessAddress ? (
-                  <p className="text-xs mt-1 p-2 rounded" style={{ color: 'var(--text-primary)', background: 'var(--cream)', fontFamily: 'monospace', lineHeight: 1.8 }}>
+                  <p className="text-xs mt-1 p-2 rounded" style={{ color: 'var(--text-primary)', background: 'var(--cream)', fontFamily: 'var(--font-mono, monospace)', lineHeight: 1.8 }}>
                     {returnConfig.businessAddress}
                   </p>
                 ) : (

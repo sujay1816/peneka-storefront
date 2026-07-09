@@ -61,14 +61,14 @@ export default function HomepageClient({ config, categories, featured, bestselle
           <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
             [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>
           </motion.span>
-          <div className="brand-strike-wrap brand-cycle-wrap">
+          <div className="brand-strike-wrap brand-cycle-wrap" style={{ width: '100%' }}>
             <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-en" style={{
-              fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
+              fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 1, letterSpacing: '.02em', margin: 0,
               background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
               WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             }}>{brandName.toUpperCase()}</motion.h1>
             <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-dev" style={{
-              fontFamily: 'var(--font-voice)', fontWeight: 600, fontSize: 88, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
+              fontFamily: "'Tiro Devanagari Sanskrit', serif", fontWeight: 400, fontSize: 90, lineHeight: 1, letterSpacing: '.02em', margin: 0,
               background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
               WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             }}>{(config as any).brand_name_devanagari || 'पिनाक'}</motion.h1>
@@ -104,7 +104,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
       <section style={{ position: 'relative', zIndex: 1, padding: '20px 28px 100px', textAlign: 'center' }}>
         <div style={{ maxWidth: 640, margin: '0 auto' }}>
           <span className="actlabel" style={{ marginBottom: 30 }}>[ ACT.II ] &nbsp;::&nbsp; THE_VOW</span>
-          <p style={{ fontFamily: 'var(--font-voice)', fontSize: 26, color: 'var(--gold)', margin: '26px 0', lineHeight: 1.8 }}>यदा यदा हि धर्मस्य ग्लानिर्भवति भारत</p>
+          <p style={{ fontFamily: "'Tiro Devanagari Sanskrit', serif", fontSize: 26, color: 'var(--gold)', margin: '26px 0', lineHeight: 1.8 }}>यदा यदा हि धर्मस्य ग्लानिर्भवति भारत</p>
           <p style={{ fontFamily: 'var(--font-voice)', fontStyle: 'italic', fontSize: 27, lineHeight: 1.65 }}>&ldquo;Whenever the old order frays, something rises to hold the line.&rdquo;</p>
           <p style={{ marginTop: 22, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>&mdash; Bhagavad Gita, paraphrased</p>
         </div>
@@ -187,7 +187,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
           <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 34, lineHeight: 1.3, margin: '26px 0' }}>The stories didn&rsquo;t end.<br />They just went <em style={{ fontStyle: 'normal', color: 'var(--crimson)' }}>quiet</em> for a while.</h2>
           <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 16 }}>Every kid who grew up hearing these names knew, on some level, that they weren&rsquo;t just bedtime stories. They were blueprints. For patience. For rage held one breath too long. For showing up when the whole side has already decided the fight is lost.</p>
           <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 16 }}>We&rsquo;re not making costumes. We&rsquo;re making the thing you reach for on the day you need to remember who you actually are.</p>
-          <p style={{ marginTop: 30, fontFamily: 'var(--font-voice)', fontSize: 20, color: 'var(--gold)' }}>॥ जय ॥</p>
+          <p style={{ marginTop: 30, fontFamily: "'Tiro Devanagari Sanskrit', serif", fontSize: 20, color: 'var(--gold)' }}>॥ जय ॥</p>
         </div>
       </section>
     </div>
