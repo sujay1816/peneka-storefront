@@ -17,7 +17,7 @@ interface SearchResult {
   category: string
 }
 
-const POPULAR_SEARCHES = ['Kanjivaram Silk', 'Banarasi Saree', 'Wedding Silk', 'Cotton Saree', 'Georgette']
+const POPULAR_SEARCHES = ['Bheema', 'Arjuna', 'Krishna', 'Hanuman', 'Mahabharata']
 const RECENT_KEY = 'skss_recent_searches'
 
 function getRecent(): string[] {
@@ -54,7 +54,7 @@ export default function SearchBar({ onClose }: { onClose: () => void }) {
         .from('products')
         .select('id, name, slug, fabric, original_price, sale_price, categories(name), product_images(url, is_primary)')
         .eq('is_active', true)
-        .or(`name.ilike.%${q}%,fabric.ilike.%${q}%,weave_type.ilike.%${q}%,origin_region.ilike.%${q}%`)
+        .or(`name.ilike.%${q}%,fabric.ilike.%${q}%`)
         .limit(6)
 
       setResults((data || []).map((p: any) => ({
@@ -115,7 +115,7 @@ export default function SearchBar({ onClose }: { onClose: () => void }) {
           value={query}
           onChange={e => { setQuery(e.target.value); setActiveIdx(-1) }}
           onKeyDown={handleKey}
-          placeholder="Search sarees by name, fabric, occasion..."
+          placeholder="Search by character, fabric..."
           className="input-base pl-10 pr-10 w-full"
           style={{ height: 44, fontSize: 15 }}
           autoComplete="off"

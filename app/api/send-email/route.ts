@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { getCfg } from '@/lib/get-config'
 
-const SITE_URL  = process.env.NEXT_PUBLIC_SITE_URL  || 'https://skss-storefront.vercel.app'
+const SITE_URL  = process.env.NEXT_PUBLIC_SITE_URL  || 'https://peneka-storefront.vercel.app'
 const ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL || 'https://skss-admin-u9ms.vercel.app'
 
 async function getEmailConfig() {
@@ -20,16 +20,16 @@ async function getEmailConfig() {
 
 function header(brandName: string) {
   return `
-    <div style="background:linear-gradient(135deg,#8B1A2B,#6B1220);padding:32px;text-align:center;">
+    <div style="background:linear-gradient(135deg,#C1442F,#7A2A1D);padding:32px;text-align:center;">
       <h1 style="color:white;margin:0;font-size:24px;font-weight:300;letter-spacing:2px;font-family:Georgia,serif;">${brandName}</h1>
-      <p style="color:#C9A84C;margin:4px 0 0;font-size:10px;letter-spacing:4px;text-transform:uppercase;">✦ SILKS &amp; SAREES ✦</p>
+      <p style="color:#DDA119;margin:4px 0 0;font-size:10px;letter-spacing:4px;text-transform:uppercase;">✦ WEAR THE EPICS ✦</p>
     </div>`
 }
 
 function footer(brandName: string) {
   return `
     <div style="background:#1A1A1A;padding:20px 32px;text-align:center;">
-      <p style="color:#C9A84C;margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;">${brandName}</p>
+      <p style="color:#DDA119;margin:0;font-size:11px;letter-spacing:3px;text-transform:uppercase;">${brandName}</p>
       <p style="color:#666;margin:6px 0 0;font-size:12px;">Pure Silk. Timeless Tradition. Royal Elegance.</p>
     </div>`
 }
@@ -75,7 +75,7 @@ function orderConfirmationHtml(order: any, items: any[], brandName: string) {
           <span style="font-size:14px;">&#8377;${Number(order.total_gst||order.gst_amount||0).toLocaleString('en-IN')}</span>
         </div>
         ${order.coupon_code ? `<div style="display:flex;justify-content:space-between;margin-bottom:12px;"><span style="color:#16A34A;font-size:14px;">Coupon (${order.coupon_code})</span><span style="color:#16A34A;font-size:14px;">&#8722;&#8377;${Number(order.coupon_discount||0).toLocaleString('en-IN')}</span></div>` : ''}
-        <div style="display:flex;justify-content:space-between;border-top:1px solid #C9A84C;padding-top:12px;">
+        <div style="display:flex;justify-content:space-between;border-top:1px solid #DDA119;padding-top:12px;">
           <span style="font-size:16px;font-weight:700;">Total Paid</span>
           <span style="color:#8B1A2B;font-size:16px;font-weight:700;">&#8377;${Number(order.total_amount||0).toLocaleString('en-IN')}</span>
         </div>
@@ -174,7 +174,7 @@ function orderStatusUpdateHtml(order: any, newStatus: string, trackingId: string
     delivered: {
       emoji: '&#9989;',
       heading: 'Order delivered!',
-      body: 'Your order has been delivered. We hope you love your saree! Please leave a review if you have a moment.',
+      body: 'Your order has been delivered. We hope you love your tee! Please leave a review if you have a moment.',
       color: '#15803D',
     },
     cancelled: {
@@ -222,7 +222,7 @@ function orderStatusUpdateHtml(order: any, newStatus: string, trackingId: string
         ${order.order_number ? `<p style="margin:4px 0 0;font-size:13px;">Order No: <strong>${order.order_number}</strong></p>` : ''}
         ${order.total_amount ? `<p style="margin:4px 0 0;font-size:13px;">Amount: <strong>&#8377;${Number(order.total_amount).toLocaleString('en-IN')}</strong></p>` : ''}
       </div>
-      <a href="${SITE_URL}/orders/${order.id}" style="display:inline-block;padding:13px 28px;background:linear-gradient(135deg,#8B1A2B,#6B1220);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">View Order Details</a>
+      <a href="${SITE_URL}/orders/${order.id}" style="display:inline-block;padding:13px 28px;background:linear-gradient(135deg,#C1442F,#7A2A1D);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">View Order Details</a>
     </div>
     ${footer(brandName)}
   </div>
@@ -233,7 +233,7 @@ function contactMessageAdminHtml(name: string, email: string, message: string, b
   return `<!DOCTYPE html><html>
 <body style="margin:0;padding:0;background:#f5f5f5;font-family:'DM Sans',Arial,sans-serif;">
   <div style="max-width:560px;margin:32px auto;background:white;border-radius:8px;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#8B1A2B,#6B1220);padding:24px 32px;">
+    <div style="background:linear-gradient(135deg,#C1442F,#7A2A1D);padding:24px 32px;">
       <h1 style="color:white;font-size:18px;font-weight:400;margin:0;">${brandName} &#8212; New Contact Message</h1>
     </div>
     <div style="padding:28px;">
@@ -263,7 +263,7 @@ function contactAutoReplyHtml(name: string, brandName: string, siteUrl: string) 
       <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 16px;">We have received your message and will get back to you within 24 hours.</p>
       <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 24px;">For urgent queries, feel free to WhatsApp us directly &#8212; we are happy to help!</p>
       <div style="text-align:center;">
-        <a href="${siteUrl}/shop" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#8B1A2B,#6B1220);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">Browse Our Collection</a>
+        <a href="${siteUrl}/shop" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#C1442F,#7A2A1D);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">Browse Our Collection</a>
       </div>
     </div>
     ${footer(brandName)}
@@ -279,13 +279,13 @@ function restockConfirmationHtml(productName: string, colour: string, brandName:
     <div style="padding:32px;">
       <h2 style="font-size:20px;font-weight:400;color:#1A1A1A;margin:0 0 12px;font-family:Georgia,serif;">You are on the waitlist!</h2>
       <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 20px;">We have added you to the waitlist for:</p>
-      <div style="background:#FFF8F0;border-left:3px solid #C9A84C;padding:14px 18px;margin-bottom:24px;">
+      <div style="background:#FFF8F0;border-left:3px solid #DDA119;padding:14px 18px;margin-bottom:24px;">
         <p style="margin:0;font-size:15px;font-weight:500;color:#1A1A1A;">${productName}</p>
         <p style="margin:4px 0 0;font-size:13px;color:#5A4A3A;">Colour: ${colour}</p>
       </div>
       <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 24px;">As soon as this item is back in stock, you will be the first to know. We will send you an email with a direct link so you can grab it before it sells out again.</p>
       <div style="text-align:center;margin-bottom:20px;">
-        <a href="${siteUrl}/shop" style="display:inline-block;padding:13px 28px;background:linear-gradient(135deg,#8B1A2B,#6B1220);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">Browse Other Sarees</a>
+        <a href="${siteUrl}/shop" style="display:inline-block;padding:13px 28px;background:linear-gradient(135deg,#C1442F,#7A2A1D);color:white;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">Browse Other Tees</a>
       </div>
     </div>
     ${footer(brandName)}
@@ -303,13 +303,13 @@ function restockAvailableHtml(productName: string, colour: string, productUrl: s
         <span style="display:inline-block;background:#EAF6ED;color:#15803D;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;border-radius:99px;">Back in Stock!</span>
       </div>
       <h2 style="font-size:20px;font-weight:400;color:#1A1A1A;margin:0 0 12px;font-family:Georgia,serif;">Great news &#8212; it is available again!</h2>
-      <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 20px;">The saree you were waiting for is back in stock. Grab it before it sells out again!</p>
-      <div style="background:#FFF8F0;border-left:3px solid #C9A84C;padding:14px 18px;margin-bottom:24px;">
+      <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 20px;">The tee you were waiting for is back in stock. Grab it before it sells out again!</p>
+      <div style="background:#FFF8F0;border-left:3px solid #DDA119;padding:14px 18px;margin-bottom:24px;">
         <p style="margin:0;font-size:15px;font-weight:500;color:#1A1A1A;">${productName}</p>
         <p style="margin:4px 0 0;font-size:13px;color:#5A4A3A;">Colour: ${colour}</p>
       </div>
       <div style="text-align:center;margin-bottom:24px;">
-        <a href="${productUrl}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#8B1A2B,#6B1220);color:white;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;box-shadow:0 4px 14px rgba(139,26,43,0.35);">Shop Now &#8594;</a>
+        <a href="${productUrl}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#C1442F,#7A2A1D);color:white;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;box-shadow:0 4px 14px rgba(139,26,43,0.35);">Shop Now &#8594;</a>
       </div>
       <p style="font-size:12px;color:#9A8A7A;text-align:center;margin:0;">Hurry &#8212; limited stock available!</p>
     </div>
@@ -436,7 +436,7 @@ export async function POST(request: Request) {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: customerEmail,
-        subject: `You are on the waitlist for ${productName || 'a saree'} — ${brandName}`,
+        subject: `You are on the waitlist for ${productName || 'an item'} — ${brandName}`,
         html: restockConfirmationHtml(productName || '', colour || '', brandName, siteUrl),
       })
       return NextResponse.json({ success: true })

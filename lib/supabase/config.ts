@@ -33,9 +33,7 @@ function mapProduct(r: any): Product {
   const isNew = new Date(r.created_at) > new Date(Date.now() - newArrivalDays * 86400000)
   return {
     id: r.id, name: r.name, slug: r.slug, description: r.description || '',
-    fabric: r.fabric || '', weaveType: r.weave_type || '', originRegion: r.origin_region || '',
-    occasion: r.occasion || [], careInstructions: r.care_instructions || 'Dry clean only',
-    blouseIncluded: r.blouse_included || false, length: r.length || 5.5, weightGrams: r.weight_grams || 0,
+    fabric: r.fabric || '',
     category: r.categories?.slug || '', categorySlug: r.categories?.slug || '', categoryName: r.categories?.name || '',
     originalPrice: r.original_price, salePrice: r.sale_price || null,
     discountPercent: r.discount_percent || null, saleStartDate: r.sale_start_date || null, saleEndDate: r.sale_end_date || null,
@@ -94,7 +92,7 @@ export async function getProducts(filters?: ProductFilters): Promise<{ products:
   // ── Search — name + fabric + origin (full text via ilike) ─────────────────
   if (filters?.search) {
     const s = `%${filters.search}%`
-    q = q.or(`name.ilike.${s},fabric.ilike.${s},origin_region.ilike.${s}`)
+    q = q.or(`name.ilike.${s},fabric.ilike.${s}`)
   }
 
   // ── Fabric filter (OR within fabrics, AND with everything else) ───────────

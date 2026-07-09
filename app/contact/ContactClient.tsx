@@ -59,7 +59,7 @@ export default function ContactClient({ cfg }: { cfg: Record<string, string> }) 
           <h1 className="text-4xl font-light mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Contact Us</h1>
           <div className="w-16 h-px mx-auto" style={{ background: 'linear-gradient(to right, transparent, var(--gold), transparent)' }} />
           <p className="text-sm mt-6 max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            We'd love to hear from you. Reach out for any queries about our sarees, orders, or anything else.
+            We'd love to hear from you. Reach out for any queries about our tees, orders, or anything else.
           </p>
         </div>
 

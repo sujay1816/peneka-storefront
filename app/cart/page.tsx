@@ -111,7 +111,7 @@ export default function CartPage() {
       </div>
       <h2 className="text-3xl font-light mb-3" style={{ fontFamily: 'var(--font-heading)' }}>Your cart is empty</h2>
       <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>Looks like you haven't added anything yet.</p>
-      <p className="text-xs mb-8" style={{ color: 'var(--text-secondary)', opacity: 0.7 }}>Discover our handpicked collection of pure silk sarees.</p>
+      <p className="text-xs mb-8" style={{ color: 'var(--text-secondary)', opacity: 0.7 }}>Discover our handpicked collection of mythology-print tees.</p>
       <div className="flex flex-col sm:flex-row gap-3">
         <Link href="/shop" className="btn-primary">Browse Collection <ArrowRight size={14} /></Link>
         <Link href="/shop?filter=new" className="btn-outline">New Arrivals</Link>

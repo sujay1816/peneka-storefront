@@ -3,14 +3,13 @@ import { useState, useEffect, useCallback, memo, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, ShoppingBag, Star, ChevronDown, ChevronUp, MapPin, RotateCcw, Shield, Truck, Share2, Check, Play, Info } from 'lucide-react'
+import { Heart, ShoppingBag, Star, ChevronDown, ChevronUp, MapPin, RotateCcw, Shield, Truck, Share2, Check, Play } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
 import RecentlyViewed, { recordRecentlyViewed } from '@/components/product/RecentlyViewed'
 import { formatPrice, getEffectivePrice } from '@/lib/utils'
 import { useCartStore } from '@/lib/store/cart'
 import { useWishlistStore } from '@/lib/store/wishlist'
 import { createClient } from '@/lib/supabase/client'
-import FabricInfoLoader from '@/components/product/FabricInfoLoader'
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import type { Product, ProductVariant, Review, SiteConfig } from '@/types'
 import toast from 'react-hot-toast'
@@ -372,7 +371,6 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
   }
 
   const [shareMenuOpen, setShareMenuOpen] = useState(false)
-  const [fabricModalOpen, setFabricModalOpen] = useState(false)
 
   const submitReview = async () => {
     if (!userId) { toast.error('Please sign in to leave a review'); return }
@@ -510,31 +508,9 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
         <div className="lg:w-1/2 pdp-info-col">
           <div className="flex items-start justify-between gap-4 mb-2">
             <div className="flex items-center gap-1.5">
-              <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--gold)' }}>{product.fabric}{product.weaveType ? ` · ${product.weaveType}` : ''}{product.originRegion ? ` · ${product.originRegion}` : ''}</p>
-              <button type="button" onClick={() => setFabricModalOpen(true)}
-                className="flex-shrink-0 transition-colors"
-                aria-label={`Learn about ${product.fabric}`}
-                style={{ color: 'var(--gold)', opacity: 0.7 }}
-                onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
-                onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '0.7')}>
-                <Info size={12} />
-              </button>
+              <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--gold)' }}>{product.fabric}</p>
             </div>
 
-            {/* Fabric info quick modal */}
-            {fabricModalOpen && (
-              <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-                style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
-                onClick={e => { if (e.target === e.currentTarget) setFabricModalOpen(false) }}>
-                <div className="w-full sm:max-w-md rounded-t-2xl sm:rounded-xl overflow-hidden" style={{ background: 'var(--cream)', maxHeight: '90vh' }}>
-                  <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--border)' }}>
-                    <h3 className="font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>About {product.fabric}</h3>
-                    <button type="button" onClick={() => setFabricModalOpen(false)} className="p-1.5 rounded-full" style={{ color: 'var(--text-secondary)' }}>✕</button>
-                  </div>
-                  <FabricInfoLoader fabric={product.fabric} onClose={() => setFabricModalOpen(false)} />
-                </div>
-              </div>
-            )}
             <div className="relative">
               <button type="button" onClick={() => setShareMenuOpen(v => !v)}
                 className="p-1.5 transition-colors"
@@ -767,13 +743,13 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
           <div>
             <Accordion id="details" title="Product Details" openSection={openSection} setOpenSection={setOpenSection}>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-                {[['Fabric', product.fabric], ['Weave Type', product.weaveType], ['Origin', product.originRegion], ['Length', `${product.length} meters`], ['Weight', product.weightGrams ? `${product.weightGrams}g` : ''], ['Blouse Piece', product.blouseIncluded ? 'Included' : 'Not Included'], ['Occasion', product.occasion.join(', ')], ...Object.entries(product.customFields)].filter(([,v]) => v).map(([k,v]) => (
+                {[['Fabric', product.fabric], ...Object.entries(product.customFields)].filter(([,v]) => v).map(([k,v]) => (
                   <><span key={`k-${k}`} style={{ color: 'var(--text-secondary)' }}>{k}</span><span key={`v-${k}`} style={{ color: 'var(--text-primary)' }}>{v}</span></>
                 ))}
               </div>
             </Accordion>
             <Accordion id="description" title="Description" openSection={openSection} setOpenSection={setOpenSection}><p>{product.description}</p></Accordion>
-            <Accordion id="care" title="Care Instructions" openSection={openSection} setOpenSection={setOpenSection}><p>{product.careInstructions}</p></Accordion>
+            <Accordion id="care" title="Care Instructions" openSection={openSection} setOpenSection={setOpenSection}><p>Machine wash cold with like colours. Do not bleach. Tumble dry low, or hang dry to preserve the print. Iron inside-out on a low setting if needed.</p></Accordion>
             <Accordion id="shipping" title={`Shipping & Returns (${config.return_window_days} days)`} openSection={openSection} setOpenSection={setOpenSection}>
               <p>Free shipping on orders above ₹{Number(config.free_shipping_above).toLocaleString('en-IN')}. Standard delivery in {config.estimated_delivery_days} business days.</p>
               <p className="mt-2">Returns accepted within {config.return_window_days} days for <strong>unused and damaged goods only</strong>. Raise a return request from your orders page with a photo of the item.</p>

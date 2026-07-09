@@ -95,7 +95,7 @@ export async function GET(request: Request) {
 function abandonedCartHtml(name: string, items: any[], cartUrl: string, brandName: string): string {
   const itemsHtml = items.slice(0, 3).map(item =>
     `<div style="padding:10px 0;border-bottom:1px solid #F0EAE2;">
-      <p style="margin:0;font-size:13px;font-weight:600;color:#1A1A1A;">${item.colour || 'Saree'} &mdash; Qty: ${item.quantity}</p>
+      <p style="margin:0;font-size:13px;font-weight:600;color:#1A1A1A;">${item.colour || 'Item'} &mdash; Qty: ${item.quantity}</p>
     </div>`
   ).join('')
   const extra = items.length > 3 ? `<p style="font-size:12px;color:#9A8A7A;margin:8px 0 0;">+${items.length - 3} more item(s)</p>` : ''
@@ -107,7 +107,7 @@ function abandonedCartHtml(name: string, items: any[], cartUrl: string, brandNam
     </div>
     <div style="padding:32px;">
       <h2 style="font-size:20px;font-weight:400;color:#1A1A1A;margin:0 0 8px;">${name}, your cart is waiting!</h2>
-      <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 20px;">You left some beautiful sarees in your cart. They are still available &mdash; but stock is limited!</p>
+      <p style="font-size:14px;color:#5A4A3A;line-height:1.7;margin:0 0 20px;">You left some tees in your cart. They are still available &mdash; but stock is limited!</p>
       <div style="background:#FDFAF7;border-radius:6px;padding:16px;margin-bottom:24px;">${itemsHtml}${extra}</div>
       <div style="text-align:center;">
         <a href="${cartUrl}" style="display:inline-block;padding:14px 32px;background:#8B1A2B;color:white;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;">

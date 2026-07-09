@@ -61,12 +61,17 @@ export default function HomepageClient({ config, categories, featured, bestselle
           <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
             [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>
           </motion.span>
-          <div className="brand-strike-wrap">
-            <motion.h1 variants={fadeUp} className="brand-strike-text" style={{
+          <div className="brand-strike-wrap brand-cycle-wrap">
+            <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-en" style={{
               fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
               background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
               WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             }}>{brandName.toUpperCase()}</motion.h1>
+            <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-dev" style={{
+              fontFamily: 'var(--font-voice)', fontWeight: 600, fontSize: 88, lineHeight: 0.95, letterSpacing: '.02em', margin: '30px 0 0',
+              background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
+              WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+            }}>{(config as any).brand_name_devanagari || 'पिनाक'}</motion.h1>
             <svg className="brand-strike-bolt" viewBox="0 0 60 180" fill="none" aria-hidden="true">
               <path d="M34 0 L14 78 L30 78 L20 180 L48 66 L30 66 Z" fill="#FFF7E0" />
               <path d="M34 0 L14 78 L30 78 L20 180 L48 66 L30 66 Z" fill="none" stroke="#FFE8A8" strokeWidth="2" opacity="0.8" />

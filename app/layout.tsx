@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 import FontLoader from '@/components/layout/FontLoader'
 import { createClient } from '@/lib/supabase/server'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
 const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 
 export async function generateMetadata(): Promise<Metadata> {

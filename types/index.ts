@@ -2,8 +2,7 @@ export type Size = 'S'|'M'|'L'|'XL'|'XXL';
 export interface ProductVariant { id:string; size:Size; colour:string; colourHex:string; stock:number; sku:string; imageUrl?:string|null; }
 export interface ProductImage { id:string; url:string; publicId:string; altText:string; isPrimary:boolean; order:number; }
 export interface Product {
-  id:string; name:string; slug:string; description:string; fabric:string; weaveType:string; originRegion:string;
-  occasion:string[]; careInstructions:string; blouseIncluded:boolean; length:number; weightGrams:number;
+  id:string; name:string; slug:string; description:string; fabric:string;
   category:string; categorySlug:string; categoryName:string;
   originalPrice:number; salePrice:number|null; discountPercent:number|null;
   saleStartDate:string|null; saleEndDate:string|null; gstRate:number;

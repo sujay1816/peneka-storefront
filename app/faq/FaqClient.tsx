@@ -6,11 +6,11 @@ import { ChevronDown } from 'lucide-react'
 // Also removed stagger delay (i * 0.07s) — made last FAQ item appear 700ms late.
 
 const DEFAULT_FAQS = [
-  { q: 'Are your sarees 100% authentic?', a: 'Yes, all our sarees are sourced directly from weavers and certified silk boards across India.' },
+  { q: 'Are your prints 100% authentic designs?', a: 'Yes, every design is created in-house and screen-printed on genuine 240 GSM cotton — nothing here is a licensed or reprinted third-party graphic.' },
   { q: 'What is your return policy?', a: 'We offer a 7-day return window for unused items in original packaging. Please contact us to initiate a return.' },
   { q: 'How long does delivery take?', a: 'Standard delivery takes 5-7 business days. Express delivery options are available at checkout.' },
   { q: 'Do you offer Cash on Delivery?', a: 'Yes, we offer Cash on Delivery across most Indian pincodes.' },
-  { q: 'How do I care for my silk saree?', a: 'Dry clean only is recommended for pure silk sarees. Store in a cool, dry place wrapped in muslin cloth.' },
+  { q: 'How do I care for my tee?', a: 'Machine wash cold with like colours, do not bleach, and tumble dry low (or hang dry) to keep the print looking sharp for longer.' },
 ]
 
 export default function FaqClient({ cfg }: { cfg: Record<string, string> }) {

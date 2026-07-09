@@ -146,13 +146,13 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
             <Link href="/" className="flex items-center gap-2 flex-shrink-0 min-w-0">
               <Image
                 src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23C1442F'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3EP%3C/text%3E%3C/svg%3E"}
-                alt={config.brand_name || 'Our Store'}
+                alt={config.brand_name || 'Pinaka'}
                 width={36} height={36} sizes="36px" className="object-contain flex-shrink-0"
               />
               <div className="min-w-0">
                 <p className="text-sm font-semibold leading-tight truncate navbar-brand-name"
                   style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)', maxWidth: '160px' }}>
-                  {config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'}
+                  {config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'}
                 </p>
                 <p className="text-xs tracking-widest hidden sm:block landscape-hide navbar-brand-subtitle"
                   style={{ color: 'var(--gold)', letterSpacing: '0.15em' }}>
@@ -324,7 +324,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                 <div className="flex items-center gap-3">
                   <Image src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23C1442F'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3EP%3C/text%3E%3C/svg%3E"} alt={config.brand_name || "Pinaka"} width={36} height={36} sizes="36px" className="object-contain" />
                   <div>
-                    <p className="text-sm font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)' }}>{config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'}</p>
+                    <p className="text-sm font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)' }}>{config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'}</p>
                     <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', fontSize: '9px' }}>{config.brand_subtitle || 'MAHABHARATA · RAMAYANA · WORN'}</p>
                   </div>
                 </div>

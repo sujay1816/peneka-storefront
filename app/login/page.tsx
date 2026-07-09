@@ -14,8 +14,8 @@ function LoginForm() {
   // redirect param is always empty — user gets stuck on the login page after signing in
   const redirect = searchParams.get('redirect') || '/'
   const authError = searchParams.get('error')
-  const [brandName, setBrandName] = useState(process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store')
-  const [brandSubtitle, setBrandSubtitle] = useState('SILKS & SAREES')
+  const [brandName, setBrandName] = useState(process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka')
+  const [brandSubtitle, setBrandSubtitle] = useState('MAHABHARATA · RAMAYANA · WORN')
   const [logoUrl, setLogoUrl] = useState('')
 
   useEffect(() => {
@@ -90,23 +90,23 @@ function LoginForm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#0D0D0D', fontFamily: 'DM Sans, sans-serif' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: '#0D0D0D', fontFamily: 'var(--font-body)' }}>
       <div className="hidden lg:flex" style={{ width: '50%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #1A0510 0%, #2D0A1E 25%, #C1442F 50%, #DDA119 70%, #2D0A1E 90%, #1A0510 100%)' }}>
         <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'repeating-linear-gradient(0deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #DDA119 0px, #DDA119 2px, transparent 2px, transparent 20px)' }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(to right, transparent, #DDA119, transparent)' }} />
         <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 48, textAlign: 'center' }}>
           <div style={{ position: 'relative', marginBottom: 24 }}>
-            <div style={{ position: 'absolute', inset: -32, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,168,76,0.3) 0%, transparent 70%)' }} />
+            <div style={{ position: 'absolute', inset: -32, borderRadius: '50%', background: 'radial-gradient(circle, rgba(221,161,25,0.3) 0%, transparent 70%)' }} />
             {logoUrl
             ? <Image src={logoUrl} alt={brandName} width={90} height={90} style={{ objectFit: 'contain', position: 'relative' }} />
-            : <div style={{ width: 90, height: 90, borderRadius: '50%', background: 'rgba(139,26,43,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: 'white', fontFamily: 'Cormorant Garamond, serif', position: 'relative' }}>S</div>}
+            : <div style={{ width: 90, height: 90, borderRadius: '50%', background: 'rgba(193,68,47,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: 'white', fontFamily: 'var(--font-heading)', position: 'relative' }}>{brandName[0]}</div>}
           </div>
-          <h1 style={{ fontSize: 48, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'Cormorant Garamond, serif' }}>{brandName}</h1>
+          <h1 style={{ fontSize: 48, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>{brandName}</h1>
           <p style={{ color: '#DDA119', fontSize: 10, letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: 20 }}>{`✦ ${brandSubtitle} ✦`}</p>
           <div style={{ width: 80, height: 1, background: 'linear-gradient(to right, transparent, #DDA119, transparent)', marginBottom: 20 }} />
-          <p style={{ fontSize: 18, fontWeight: 300, fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', fontFamily: 'Cormorant Garamond, serif', lineHeight: 1.6 }}>
-            "Pure Silk. Timeless Tradition.<br />Royal Elegance."
+          <p style={{ fontSize: 18, fontWeight: 300, fontStyle: 'italic', color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-voice)', lineHeight: 1.6 }}>
+            "Wear the Epics.<br />Mahabharata. Ramayana."
           </p>
         </div>
       </div>
@@ -118,9 +118,9 @@ function LoginForm() {
           <div className="lg:hidden" style={{ textAlign: 'center', marginBottom: 32 }}>
             {logoUrl
             ? <Image src={logoUrl} alt={brandName} width={50} height={50} style={{ objectFit: 'contain', margin: '0 auto 8px' }} />
-            : <div style={{ width: 50, height: 50, borderRadius: '50%', background: 'rgba(139,26,43,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: 'white', margin: '0 auto 8px' }}>S</div>}
+            : <div style={{ width: 50, height: 50, borderRadius: '50%', background: 'rgba(193,68,47,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: 'white', margin: '0 auto 8px' }}>{brandName[0]}</div>}
           </div>
-          <h2 style={{ fontSize: 30, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'Cormorant Garamond, serif' }}>Welcome back</h2>
+          <h2 style={{ fontSize: 30, fontWeight: 300, color: 'white', marginBottom: 8, fontFamily: 'var(--font-heading)' }}>Welcome back</h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', marginBottom: 28 }}>Sign in to your account</p>
           <button type="button" onClick={handleGoogle} disabled={googleLoading}
             style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '13px 16px', marginBottom: 20, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 14, cursor: 'pointer' }}>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = createClient()
@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .in('key', ['brand_name'])
   const cfg: Record<string, string> = {}
   data?.forEach((r: any) => { cfg[r.key] = r.value })
-  const brandName = cfg.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'
+  const brandName = cfg.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 
   return {
     title: 'Privacy Policy',

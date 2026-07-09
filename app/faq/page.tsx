@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import FaqClient from './FaqClient'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
 
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = createClient()
@@ -10,15 +10,15 @@ export async function generateMetadata(): Promise<Metadata> {
     .in('key', ['brand_name'])
   const cfg: Record<string, string> = {}
   data?.forEach((r: any) => { cfg[r.key] = r.value })
-  const brandName = cfg.brand_name || 'Sai Krishna Silks & Sarees'
+  const brandName = cfg.brand_name || 'Pinaka'
 
   return {
     title: 'Frequently Asked Questions',
-    description: `Find answers to common questions about our sarees, shipping, returns, payments and more.`,
+    description: `Find answers to common questions about our tees, shipping, returns, payments and more.`,
     alternates: { canonical: `${SITE_URL}/faq` },
     openGraph: {
       title: `Frequently Asked Questions | ${brandName}`,
-      description: `Find answers to common questions about our sarees, shipping, returns, payments and more.`,
+      description: `Find answers to common questions about our tees, shipping, returns, payments and more.`,
       type: 'website',
       url: `${SITE_URL}/faq`,
     },

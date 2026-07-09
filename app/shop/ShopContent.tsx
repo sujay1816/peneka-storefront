@@ -233,7 +233,7 @@ export default function ShopContent({ products, categories, config, userId: serv
   // Smart voice parser — converts speech into filters
   const parseVoiceQuery = (transcript: string) => {
     const t = transcript.toLowerCase().trim()
-    const FABRICS = ['kanjivaram', 'kanchipuram', 'banarasi', 'banaras', 'chanderi', 'tussar', 'organza', 'linen', 'georgette', 'chiffon', 'cotton', 'khadi', 'crepe', 'raw silk', 'bandhani', 'bandini']
+    const FABRICS = ['combed cotton', 'cotton blend', 'heavyweight cotton', 'gsm', 'organic cotton', 'cotton']
     const OCCASIONS = ['wedding', 'weddings', 'festive', 'festival', 'casual', 'office', 'party', 'religious', 'daily', 'daily wear']
     const OCCASION_MAP: Record<string,string> = { weddings: 'Wedding', wedding: 'Wedding', festive: 'Festive', festival: 'Festive', casual: 'Casual', office: 'Office', party: 'Party', religious: 'Religious', daily: 'Daily Wear', 'daily wear': 'Daily Wear' }
 
@@ -243,7 +243,7 @@ export default function ShopContent({ products, categories, config, userId: serv
     // Detect fabric
     for (const fab of FABRICS) {
       if (t.includes(fab)) {
-        const canon = fab === 'kanchipuram' ? 'Kanjivaram' : fab === 'banaras' ? 'Banarasi' : fab.charAt(0).toUpperCase() + fab.slice(1)
+        const canon = fab.charAt(0).toUpperCase() + fab.slice(1)
         setSelectedFabrics([canon])
         matched = true
         break
@@ -269,7 +269,7 @@ export default function ShopContent({ products, categories, config, userId: serv
     }
 
     // Detect "new" / "latest"
-    if (t.includes('new arrival') || t.includes('latest') || t.includes('new saree')) {
+    if (t.includes('new arrival') || t.includes('latest') || t.includes('new tee')) {
       setOnlyNew(true); matched = true
     }
 
@@ -283,7 +283,7 @@ export default function ShopContent({ products, categories, config, userId: serv
       newSearch = transcript.trim()
       setSearchInput(newSearch)
       setSearch(newSearch)
-      setVoiceError(`I heard "${transcript}". Try: "show me Kanjivaram under ₹5000"`)
+      setVoiceError(`I heard "${transcript}". Try: "show me Arjuna tees under ₹900"`)
       return
     }
 
@@ -389,7 +389,7 @@ export default function ShopContent({ products, categories, config, userId: serv
           <Search size={14} style={{ color: 'var(--text-secondary)' }} />
           <input type="text" aria-label="Search products" value={searchInput} onChange={e => setSearchInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearchSubmit()}
-            placeholder={voiceActive ? 'Listening...' : 'Search sarees...'}
+            placeholder={voiceActive ? 'Listening...' : 'Search tees...'}
             className="text-sm outline-none bg-transparent flex-1"
             style={{ color: 'var(--text-primary)' }} />
           {searchInput && <button type="button" onClick={() => { setSearchInput(''); setSearch(''); setPage(1) }}><X size={14} /></button>}
@@ -411,7 +411,7 @@ export default function ShopContent({ products, categories, config, userId: serv
             <Search size={14} style={{ color: 'var(--text-secondary)' }} />
             <input type="text" aria-label="Search products" value={searchInput} onChange={e => setSearchInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearchSubmit()}
-              placeholder={voiceActive ? 'Listening...' : 'Search sarees...'}
+              placeholder={voiceActive ? 'Listening...' : 'Search tees...'}
               className="text-xs outline-none bg-transparent"
               style={{ width: 140, color: 'var(--text-primary)' }} />
             {searchInput && <button type="button" onClick={() => { setSearchInput(''); setSearch(''); setPage(1) }}><X size={12} /></button>}
@@ -513,7 +513,7 @@ export default function ShopContent({ products, categories, config, userId: serv
             <div className="py-16 text-center">
               <div style={{ fontSize: 56, marginBottom: 16 }}>🛍️</div>
               <h3 className="text-xl font-light mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-                No sarees found
+                No tees found
               </h3>
               <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
                 {activeCount > 0

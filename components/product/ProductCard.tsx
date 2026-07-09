@@ -256,7 +256,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
           <div className="p-3 pb-2">
             <p className="text-xs tracking-widest uppercase mb-1 product-card-fabric"
               style={{ color: 'var(--text-secondary)', fontSize: '10px' }}>
-              {product.fabric}{product.originRegion ? ` · ${product.originRegion}` : ''}
+              {product.fabric}
             </p>
             <p className="font-light leading-snug mb-2 transition-colors product-card-name" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', fontSize: '15px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--crimson)')}

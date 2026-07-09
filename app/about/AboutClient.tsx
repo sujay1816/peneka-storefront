@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 export default function AboutClient({ cfg }: { cfg: Record<string, string> }) {
   const title = cfg.about_title || 'About Us'
   const content = cfg.about_content || ''
-  const brandName = cfg.brand_name || 'Our Store'
+  const brandName = cfg.brand_name || 'Pinaka'
   const logoUrl = cfg.logo_url || ''
 
   return (

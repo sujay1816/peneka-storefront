@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     const { type, order, phone, trackingId, courierName } = await request.json()
 
-    let brandName = 'Sai Krishna Silks & Sarees'
+    let brandName = 'Pinaka'
     try {
       const { createClient } = await import('@supabase/supabase-js')
       const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)

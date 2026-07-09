@@ -13,7 +13,7 @@ import type { Product, ProductVariant, ProductImage } from '@/types'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
 const DEFAULT_FABRICS = ['Silk','Cotton','Georgette','Chiffon','Linen','Organza','Net','Crepe','Tussar','Chanderi']
 
 export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: { category: string 
     const supabase = createClient()
     const { data: cat } = await supabase
       .from('categories').select('name, image_url').eq('slug', params.category).single()
-    if (!cat) return { title: 'Shop Sarees' }
+    if (!cat) return { title: 'Shop Tees' }
     const { data: cfg } = await supabase
       .from('site_config').select('value').eq('key', 'brand_name').single()
-    const brandName = cfg?.value || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'
-    const title = `${cat.name} Sarees — Buy Online`
-    const desc = `Shop authentic ${cat.name} sarees at ${brandName}. Free shipping above ₹2,500. Easy returns.`
+    const brandName = cfg?.value || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
+    const title = `${cat.name} T-Shirts — Buy Online`
+    const desc = `Shop authentic ${cat.name} t-shirts at ${brandName}. Free shipping above ₹999. Easy returns.`
     return {
       title,
       description: desc,
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: { category: string 
         images: [{ url: cat.image_url || '', width: 800, height: 600 }],
       },
     }
-  } catch { return { title: 'Shop Sarees' } }
+  } catch { return { title: 'Shop Tees' } }
 }
 
 function mapProduct(r: any): Product {
@@ -50,9 +50,7 @@ function mapProduct(r: any): Product {
   const totalStock = variants.reduce((s, v) => s + v.stock, 0)
   return {
     id: r.id, name: r.name, slug: r.slug, description: r.description || '',
-    fabric: r.fabric || '', weaveType: r.weave_type || '', originRegion: r.origin_region || '',
-    occasion: r.occasion || [], careInstructions: r.care_instructions || 'Dry clean only',
-    blouseIncluded: r.blouse_included || false, length: r.length || 5.5, weightGrams: r.weight_grams || 0,
+    fabric: r.fabric || '',
     category: r.categories?.slug || '', categorySlug: r.categories?.slug || '', categoryName: r.categories?.name || '',
     originalPrice: r.original_price, salePrice: r.sale_price || null,
     discountPercent: r.discount_percent || null, saleStartDate: r.sale_start_date || null, saleEndDate: r.sale_end_date || null,
@@ -119,7 +117,7 @@ export default async function CategoryPage({ params, searchParams }: { params: {
 
   const products = (productsResult.data || []).map(mapProduct)
   const totalProducts = productsResult.count ?? 0
-  const brandName = config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'
+  const brandName = config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -132,7 +130,7 @@ export default async function CategoryPage({ params, searchParams }: { params: {
 
   const itemListSchema = {
     '@context': 'https://schema.org', '@type': 'ItemList',
-    name: `${cat.name} Sarees`, url: `${SITE_URL}/shop/${params.category}`,
+    name: `${cat.name} T-Shirts`, url: `${SITE_URL}/shop/${params.category}`,
     numberOfItems: totalProducts,
     itemListElement: products.slice(0, 10).map((p, i) => ({
       '@type': 'ListItem', position: i + 1, url: `${SITE_URL}/product/${p.slug}`, name: p.name,

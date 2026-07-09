@@ -11,8 +11,8 @@ import { getSiteConfig, getCategories, getProductBySlug, getProductReviews, getR
 // ISR handles cold cache efficiently on first visit.
 export const revalidate = 60
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
-const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
@@ -31,21 +31,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const descParts = [
       product.description || '',
       product.fabric ? `Made from ${product.fabric}.` : '',
-      product.weaveType ? `${product.weaveType} weave.` : '',
-      product.originRegion ? `From ${product.originRegion}.` : '',
-      product.occasion?.length ? `Perfect for ${product.occasion.slice(0, 3).join(', ')}.` : '',
       `Price: ₹${price.toLocaleString('en-IN')}.`,
       'Free shipping available. Easy returns.',
     ].filter(Boolean).join(' ')
 
     const keywords = [
       product.name,
-      product.fabric && `${product.fabric} saree`,
-      product.weaveType && `${product.weaveType} saree`,
-      product.originRegion && `${product.originRegion} saree`,
-      ...(product.occasion || []).map((o: string) => `${o.toLowerCase()} saree`),
-      'buy saree online',
-      'Indian saree',
+      product.fabric && `${product.fabric} t-shirt`,
+      `${product.categoryName} t-shirt`,
+      'mythology t-shirt',
+      'buy t-shirt online india',
       brandName,
     ].filter(Boolean) as string[]
 
@@ -76,7 +71,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       },
     }
   } catch {
-    return { title: `${process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'} — Premium Silk Sarees` }
+    return { title: `${process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'} — Wear the Epics` }
   }
 }
 
@@ -159,12 +154,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
     ...(product.fabric ? {
       material: product.fabric,
     } : {}),
-    ...(product.originRegion ? {
-      countryOfOrigin: {
-        '@type': 'Country',
-        name: 'India',
-      },
-    } : {}),
+    countryOfOrigin: {
+      '@type': 'Country',
+      name: 'India',
+    },
   }
 
   // BreadcrumbList schema

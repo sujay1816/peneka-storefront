@@ -25,7 +25,7 @@ export default function OrderDetailPage() {
     supportEmail: string
     returnWindowDays: string
     brandName: string
-  }>({ businessAddress: '', whatsappNumber: '', supportEmail: '', returnWindowDays: '7', brandName: 'SKSS' })
+  }>({ businessAddress: '', whatsappNumber: '', supportEmail: '', returnWindowDays: '7', brandName: 'Pinaka' })
   // FIX: Moved here from after if(!order) guard — hooks must always be called unconditionally
   const [cancelling, setCancelling] = useState(false)
   const [downloadingInvoice, setDownloadingInvoice] = useState(false)
@@ -63,7 +63,7 @@ export default function OrderDetailPage() {
           whatsappNumber: c.whatsapp_number || '',
           supportEmail: c.support_email || '',
           returnWindowDays: c.return_window_days || '7',
-          brandName: c.brand_name || 'SKSS',
+          brandName: c.brand_name || 'Pinaka',
         })
       }
       setLoading(false)
@@ -233,7 +233,7 @@ export default function OrderDetailPage() {
           confirmed:        { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', border: '#BBF7D0', icon: '✅', title: 'Order Confirmed!',       subtitle: 'Thank you for your order!',                color: '#15803D' },
           processing:       { bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', border: '#BFDBFE', icon: '⚙️', title: 'Order Processing',        subtitle: 'We are preparing your order.',             color: '#1D4ED8' },
           shipped:          { bg: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)', border: '#DDD6FE', icon: '🚚', title: 'Order Shipped!',           subtitle: order.courier_name ? `Courier: ${order.courier_name}` : 'Your order is on the way!', color: '#6D28D9' },
-          delivered:        { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', border: '#BBF7D0', icon: '🎉', title: 'Order Delivered!',         subtitle: 'We hope you love your saree!',             color: '#15803D' },
+          delivered:        { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', border: '#BBF7D0', icon: '🎉', title: 'Order Delivered!',         subtitle: 'We hope you love your tee!',             color: '#15803D' },
           cancelled:        { bg: 'linear-gradient(135deg, #FFF1F2, #FFE4E6)', border: '#FECDD3', icon: '❌', title: 'Order Cancelled',          subtitle: 'This order has been cancelled.',           color: '#BE123C' },
           return_requested: { bg: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)', border: '#FDE68A', icon: '↩️', title: 'Return Requested',        subtitle: 'We are reviewing your return request.',   color: '#92400E' },
           return_approved:  { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', border: '#BBF7D0', icon: '✅', title: 'Return Approved',          subtitle: 'Your return has been approved! See instructions below.',        color: '#15803D' },
@@ -381,7 +381,7 @@ export default function OrderDetailPage() {
                     borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     background: done ? 'var(--crimson)' : 'white',
                     border: `2px solid ${done ? 'var(--crimson)' : 'var(--border)'}`,
-                    boxShadow: active ? '0 0 0 3px rgba(139,26,43,0.2)' : 'none',
+                    boxShadow: active ? '0 0 0 3px rgba(193,68,47,0.2)' : 'none',
                     flexShrink: 0,
                   }}>
                     {done ? <span style={{ fontSize: 11 }}>{step.icon}</span> : <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--border)', display: 'block' }} />}
@@ -612,9 +612,9 @@ export default function OrderDetailPage() {
         <button type="button"
           onClick={() => {
             const url = window.location.origin + '/shop'
-            const msg = `Check out this beautiful silk saree collection!`
+            const msg = `Check out this mythology tee collection!`
             if (navigator.share) {
-              navigator.share({ title: 'Silk Sarees', text: msg, url }).catch(() => {})
+              navigator.share({ title: 'Pinaka', text: msg, url }).catch(() => {})
             } else {
               window.open(`https://wa.me/?text=${encodeURIComponent(msg + ' ' + url)}`, '_blank', 'noopener')
             }

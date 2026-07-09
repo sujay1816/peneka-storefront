@@ -57,7 +57,7 @@ export default function InvoiceDocument({ order, items, brandName, brandEmail, s
         <View style={styles.header}>
           <View style={styles.brandBlock}>
             <Text style={styles.brandName}>{brandName}</Text>
-            <Text style={styles.brandSub}>Silks & Sarees</Text>
+            <Text style={styles.brandSub}>Wear the Epics</Text>
             {storeAddress ? <Text style={{ fontSize: 8, color: '#9A8A7A', marginTop: 4, maxWidth: 200 }}>{storeAddress}</Text> : null}
             {brandEmail ? <Text style={{ fontSize: 8, color: '#9A8A7A', marginTop: 2 }}>{brandEmail}</Text> : null}
             {storeGstin ? (

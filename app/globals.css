@@ -778,3 +778,26 @@ video {
   95%   { opacity: .55; }
   96%   { opacity: 0; }
 }
+
+/* ---------- Brand wordmark English/Devanagari crossfade cycle ---------- */
+.brand-cycle-wrap { position: relative; }
+.brand-cycle-en {
+  animation: brandFlash 7s ease-in-out infinite, cycleEn 10s ease-in-out infinite;
+}
+.brand-cycle-dev {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  animation: brandFlash 7s ease-in-out infinite, cycleDev 10s ease-in-out infinite;
+}
+@keyframes cycleEn {
+  0%, 68%   { opacity: 1; }
+  72%, 92%  { opacity: 0; }
+  96%, 100% { opacity: 1; }
+}
+@keyframes cycleDev {
+  0%, 68%   { opacity: 0; }
+  72%, 92%  { opacity: 1; }
+  96%, 100% { opacity: 0; }
+}

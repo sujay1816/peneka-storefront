@@ -7,47 +7,47 @@ import ShopContent from './ShopContent'
 import BackToTop from '@/components/layout/BackToTop'
 // PERFORMANCE: ISR with 30s revalidate.
 // Key insight: shop URL params (category, filter, q) make each URL unique.
-// Next.js caches each URL separately, so /shop?category=kanjivaram is cached
-// independently from /shop?category=banarasi. All filtering now server-side.
+// Next.js caches each URL separately, so /shop?category=arjuna is cached
+// independently from /shop?category=krishna. All filtering now server-side.
 export const revalidate = 60
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://skss-storefront.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://peneka-storefront.vercel.app'
 
 export async function generateMetadata({ searchParams }: { searchParams: any }): Promise<Metadata> {
   const config = await getSiteConfig().catch(() => ({} as any))
-  const brandName = config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'
+  const brandName = config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Pinaka'
   const category = searchParams?.category
   const filter = searchParams?.filter
   const q = searchParams?.q
 
-  let title = 'Shop All Sarees'
-  let desc = `Browse our complete collection of pure silk sarees, handloom weaves and traditional designs at ${brandName}. Free shipping above ₹1,999.`
+  let title = 'Shop All Tees'
+  let desc = `Browse our complete collection of mythology-print t-shirts at ${brandName}. Free shipping above ₹999.`
 
   if (category) {
     const catName = category.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
     title = `${catName} — Buy Online`
-    desc = `Shop authentic ${catName} at ${brandName}. Handpicked collection with free shipping above ₹1,999. Easy returns.`
+    desc = `Shop authentic ${catName} tees at ${brandName}. Handpicked collection with free shipping above ₹999. Easy returns.`
   } else if (filter === 'new') {
-    title = 'New Arrivals — Latest Silk Sarees'
-    desc = `Discover our latest silk saree collection at ${brandName}. Fresh arrivals updated regularly. Shop Kanjivaram, Banarasi and more.`
+    title = 'New Arrivals — Latest Mythology Tees'
+    desc = `Discover our latest mythology t-shirt collection at ${brandName}. Fresh arrivals updated regularly.`
   } else if (filter === 'bestsellers') {
-    title = 'Bestselling Sarees — Most Loved'
-    desc = `Shop our most loved sarees at ${brandName}. Top-rated by thousands of customers. Authentic silk guaranteed.`
+    title = 'Bestselling Tees — Most Loved'
+    desc = `Shop our most loved tees at ${brandName}. Top-rated by thousands of customers.`
   } else if (filter === 'featured') {
-    title = 'Featured Collection — Curated Sarees'
-    desc = `Explore our curated featured saree collection at ${brandName}. Handpicked finest silk sarees for every occasion.`
+    title = 'Featured Collection — Curated Tees'
+    desc = `Explore our curated featured t-shirt collection at ${brandName}. Handpicked designs from the Mahabharata and Ramayana.`
   } else if (q) {
     title = `"${q}" — Search Results`
-    desc = `Search results for "${q}" at ${brandName}. Find your perfect saree from our authentic collection.`
+    desc = `Search results for "${q}" at ${brandName}. Find your perfect mythology tee from our collection.`
   }
 
   return {
     title,
     description: desc,
     keywords: [
-      'sarees online India', 'buy silk sarees', 'kanjivaram saree online',
-      'banarasi silk saree', 'bridal sarees', 'handloom sarees',
-      brandName, category || 'saree collection',
+      'mythology t-shirts india', 'mahabharata t-shirt', 'ramayana t-shirt',
+      'arjuna t-shirt', 'krishna t-shirt', 'graphic tees india',
+      brandName, category || 'mythology tee collection',
     ],
     alternates: { canonical: `${SITE_URL}/shop${category ? `?category=${category}` : ''}` },
     openGraph: {
@@ -82,7 +82,7 @@ export default async function ShopPage({ searchParams }: { searchParams: any }) 
   ])
 
   // SCALABILITY: All filtering now server-side in Postgres.
-  // With 200+ sarees, only PAGE_SIZE products are fetched per request.
+  // With many products, only PAGE_SIZE products are fetched per request.
   // URL params drive the filter — each unique URL is cached by ISR independently.
   const PAGE_SIZE = 16
   const currentPage = Math.max(1, parseInt(searchParams?.page || '1', 10))
@@ -121,7 +121,7 @@ export default async function ShopPage({ searchParams }: { searchParams: any }) 
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Saree Collection',
+    name: 'Tee Collection',
     url: `${SITE_URL}/shop`,
     numberOfItems: totalProducts,
     itemListElement: products.slice(0, 10).map((p, i) => ({

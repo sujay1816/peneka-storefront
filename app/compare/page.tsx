@@ -12,10 +12,6 @@ import toast from 'react-hot-toast'
 const ROWS = [
   { label: 'Price',     key: 'price'   },
   { label: 'Fabric',    key: 'fabric'  },
-  { label: 'Occasion',  key: 'occasion' },
-  { label: 'Length',    key: 'length'  },
-  { label: 'Weight',    key: 'weight'  },
-  { label: 'Blouse',    key: 'blouse'  },
   { label: 'In Stock',  key: 'stock'   },
   { label: 'Rating',    key: 'rating'  },
 ]
@@ -29,7 +25,7 @@ export default function ComparePage() {
     <div className="page-container py-20 text-center">
       <p className="text-4xl mb-4">🔍</p>
       <h1 className="text-xl font-semibold mb-2" style={{ fontFamily: 'var(--font-heading)' }}>No products to compare</h1>
-      <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>Browse our collection and tick the compare icon on up to 3 sarees.</p>
+      <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>Browse our collection and tick the compare icon on up to 3 tees.</p>
       <Link href="/shop" className="btn-primary inline-flex">Browse Collection</Link>
     </div>
   )
@@ -40,10 +36,6 @@ export default function ComparePage() {
     switch (key) {
       case 'price':   return isOnSale ? `${formatPrice(ep)} (was ${formatPrice(p.originalPrice)})` : formatPrice(ep)
       case 'fabric':  return p.fabric || '—'
-      case 'occasion': return Array.isArray(p.occasion) ? p.occasion.join(', ') : (p.occasion || '—')
-      case 'length':  return p.length ? `${p.length}m` : '—'
-      case 'weight':  return p.weightGrams ? `${p.weightGrams}g` : '—'
-      case 'blouse':  return p.blouseIncluded ? 'Included' : 'Not included'
       case 'stock':   return p.isOutOfStock ? 'Out of stock' : `${p.totalStock} available`
       case 'rating':  return p.reviewCount > 0 ? `★ ${p.averageRating} (${p.reviewCount})` : 'No reviews yet'
       default:        return '—'
@@ -69,7 +61,7 @@ export default function ComparePage() {
 
       <div className="flex items-center justify-between mt-6 mb-8">
         <h1 className="text-2xl font-light" style={{ fontFamily: 'var(--font-heading)' }}>
-          Compare <em>Sarees</em>
+          Compare <em>Tees</em>
         </h1>
         <button type="button" onClick={clear} className="text-xs font-medium transition-colors"
           style={{ color: 'var(--crimson)' }}>

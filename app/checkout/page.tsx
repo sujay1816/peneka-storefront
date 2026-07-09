@@ -194,7 +194,7 @@ export default function CheckoutPage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: razorpayOrder.amount,
         currency: 'INR',
-        name: document.title.split(' – ')[0] || 'Our Store',
+        name: document.title.split(' – ')[0] || 'Pinaka',
         description: `Order for ${items.length} item(s)`,
         image: (document.querySelector('link[rel="icon"]') as HTMLLinkElement)?.href || '',
         order_id: razorpayOrder.id,
