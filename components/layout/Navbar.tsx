@@ -156,7 +156,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                 </p>
                 <p className="text-xs tracking-widest hidden sm:block landscape-hide navbar-brand-subtitle"
                   style={{ color: 'var(--gold)', letterSpacing: '0.15em' }}>
-                  {config.brand_subtitle || 'SILKS & SAREES'}
+                  {config.brand_subtitle || 'MAHABHARATA · RAMAYANA · WORN'}
                 </p>
               </div>
             </Link>
@@ -325,7 +325,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                   <Image src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%238B1A2B'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3ES%3C/text%3E%3C/svg%3E"} alt={config.brand_name || "SKSS"} width={36} height={36} sizes="36px" className="object-contain" />
                   <div>
                     <p className="text-sm font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)' }}>{config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'}</p>
-                    <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', fontSize: '9px' }}>{config.brand_subtitle || 'SILKS & SAREES'}</p>
+                    <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', fontSize: '9px' }}>{config.brand_subtitle || 'MAHABHARATA · RAMAYANA · WORN'}</p>
                   </div>
                 </div>
                 <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={22} style={{ color: 'var(--text-primary)' }} /></button>

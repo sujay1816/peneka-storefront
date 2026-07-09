@@ -334,7 +334,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
         <div className="marquee-track">
           {[0, 1].map(copy => (
             <span key={copy} className="marquee-item text-xs tracking-widest uppercase font-medium px-6" style={{ color: 'var(--gold-light)' }}>
-              ✦ Pure Silk Sarees &nbsp;&nbsp;✦ Handloom Weaves &nbsp;&nbsp;✦ Kanjivaram &nbsp;&nbsp;✦ Banarasi &nbsp;&nbsp;✦ Free Shipping Above ₹{Number(config.free_shipping_above || 1999).toLocaleString('en-IN')} &nbsp;&nbsp;✦ Authentic Craftsmanship &nbsp;&nbsp;✦ {config.return_window_days || 7}-Day Easy Returns &nbsp;&nbsp;
+              ✦ Mythology-Print Tees &nbsp;&nbsp;✦ Mahabharata &nbsp;&nbsp;✦ Ramayana &nbsp;&nbsp;✦ Pre-Printed &amp; In Stock &nbsp;&nbsp;✦ Free Shipping Above ₹{Number(config.free_shipping_above || 999).toLocaleString('en-IN')} &nbsp;&nbsp;✦ 240 GSM Combed Cotton &nbsp;&nbsp;✦ {config.return_window_days || 7}-Day Easy Returns &nbsp;&nbsp;
             </span>
           ))}
         </div>
@@ -348,8 +348,8 @@ export default function HomepageClient({ config, categories, featured, bestselle
               { icon: '🤝', text: 'Cash on Delivery available' },
               { icon: '🔒', text: '100% secure payments' },
               { icon: '↩️', text: `${config.return_window_days || 7}-day easy returns` },
-              { icon: '✅', text: 'Pure silk, certified authentic' },
-              { icon: '📦', text: `Free shipping above ₹${Number(config.free_shipping_above || 1999).toLocaleString('en-IN')}` },
+              { icon: '✅', text: '240 GSM heavyweight cotton' },
+              { icon: '📦', text: `Free shipping above ₹${Number(config.free_shipping_above || 999).toLocaleString('en-IN')}` },
             ].map((item, i, arr) => (
               <div key={i} className="flex items-center gap-1.5">
                 <span style={{ fontSize: 13 }}>{item.icon}</span>
@@ -370,10 +370,10 @@ export default function HomepageClient({ config, categories, featured, bestselle
         <div className="page-container py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: <Truck size={22} />, title: 'Free Shipping', sub: `On orders above ₹${Number(config.free_shipping_above || 1999).toLocaleString('en-IN')}` },
+              { icon: <Truck size={22} />, title: 'Free Shipping', sub: `On orders above ₹${Number(config.free_shipping_above || 999).toLocaleString('en-IN')}` },
               { icon: <RotateCcw size={22} />, title: `${config.return_window_days || 7}-Day Returns`, sub: 'Hassle-free returns' },
-              { icon: <Shield size={22} />, title: '100% Authentic', sub: 'Pure silk, certified' },
-              { icon: <Award size={22} />, title: 'Legacy Brand', sub: 'Trusted for generations' },
+              { icon: <Shield size={22} />, title: 'Held in Stock', sub: 'Pre-printed, ready to ship' },
+              { icon: <Award size={22} />, title: 'Heavyweight Cotton', sub: '240 GSM, built to last' },
             ].map((b, i) => (
               <div key={i}
                 className="flex items-center gap-3 p-3 md:p-4 rounded-lg transition-all cursor-default trust-badge-card"
@@ -418,7 +418,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
                             onLoad={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1' }} />
                         </>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center"><span className="text-4xl">🥻</span></div>
+                        <div className="w-full h-full flex items-center justify-center"><span className="text-4xl">👕</span></div>
                       )}
                       <div className="absolute inset-0 transition-all duration-300 group-hover:bg-black/10"
                         style={{ background: 'linear-gradient(to top, rgba(139,26,43,0.65) 0%, transparent 55%)' }} />
@@ -462,7 +462,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center"
                         style={{ background: 'linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%)' }}>
-                        <span className="text-5xl mb-2">🥻</span>
+                        <span className="text-5xl mb-2">👕</span>
                       </div>
                     )}
                     <div className="absolute inset-0 transition-all duration-300 group-hover:bg-black/20"
@@ -522,12 +522,12 @@ export default function HomepageClient({ config, categories, featured, bestselle
           </motion.div>
           <motion.h2 variants={fadeUp} className="font-light text-white mb-4"
             style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 5vw, 64px)', lineHeight: 1.2 }}>
-            Every saree tells a story.<br />
-            <em style={{ color: 'var(--gold-light)' }}>Yours starts here.</em>
+            Every warrior carries a standard.<br />
+            <em style={{ color: 'var(--gold-light)' }}>Yours is a t-shirt.</em>
           </motion.h2>
           <motion.p variants={fadeUp} className="text-sm max-w-lg mx-auto mb-10"
             style={{ color: 'rgba(255,255,255,0.55)', lineHeight: 1.8 }}>
-            Handpicked from the finest looms across India — Kanjivaram, Banarasi, Chanderi and more.
+            Screen-printed on heavyweight cotton — Bheema, Arjuna, Karna, Hanuman, Rama and Krishna.
           </motion.p>
           <motion.div variants={fadeUp}>
             <Link href="/shop" className="group inline-flex items-center gap-3 px-10 py-4 text-xs font-medium tracking-widest uppercase transition-all"
@@ -607,12 +607,12 @@ export default function HomepageClient({ config, categories, featured, bestselle
             </div>
             <div className="md:w-2/3 text-center md:text-left">
               <p className="text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--gold)' }}>Our Story</p>
-              <h2 className="section-heading mb-4">A Legacy of Silk & Tradition</h2>
+              <h2 className="section-heading mb-4">Wear the Epics</h2>
               <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                {config.brand_name || 'Our brand'} is a celebration of India's finest weaving traditions. We bring you an exquisite collection of pure silk and traditional sarees, each handpicked to ensure unmatched quality and authenticity.
+                {config.brand_name || 'Our brand'} is a celebration of India's great epics. We take the warriors and legends of the Mahabharata and Ramayana off the page and onto heavyweight cotton, each design screen-printed for lasting quality.
               </p>
               <p className="text-sm leading-relaxed mb-8" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                From the golden looms of Kanjivaram to the royal grandeur of Banarasi — every saree in our collection carries the spirit of timeless elegance.
+                From Bheema's mace to Arjuna's bow — every tee in our collection carries a story you already know by heart.
               </p>
               <Link href="/about" className="btn-outline">Our Story <ArrowRight size={14} /></Link>
             </div>

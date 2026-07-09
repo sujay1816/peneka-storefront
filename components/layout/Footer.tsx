@@ -39,9 +39,9 @@ export default function Footer({ config, categories }: { config: SiteConfig; cat
       {/* Newsletter */}
       <div className="border-b py-12" style={{ borderColor: 'var(--border)', background: 'var(--crimson)' }}>
         <div className="page-container text-center">
-          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold-light)' }}>Join the Circle</p>
-          <h3 className="text-3xl font-light text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>Stay Draped in Elegance</h3>
-          <p className="text-sm mb-6 text-white/70">Get early access to new arrivals, exclusive offers and styling tips.</p>
+          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--gold-light)' }}>Join the Guild</p>
+          <h3 className="text-3xl font-light text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>New Drops &amp; Lore</h3>
+          <p className="text-sm mb-6 text-white/70">Get early access to new drops, restocks and stories from the epics.</p>
           <form onSubmit={handleSubscribe} className="newsletter-input-group">
             <input
               type="email"
@@ -73,11 +73,11 @@ export default function Footer({ config, categories }: { config: SiteConfig; cat
               <Image src={config.logo_url || ""} alt={config.brand_name || "SKSS"} width={48} height={48} className="object-contain" />
               <div>
                 <p className="font-semibold" style={{ fontFamily: 'var(--font-heading)', color: 'var(--crimson)', fontSize: '18px' }}>{config.brand_name || process.env.NEXT_PUBLIC_BRAND_NAME || 'Our Store'}</p>
-                <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', letterSpacing: '0.12em' }}>{config.brand_subtitle || 'SILKS & SAREES'}</p>
+                <p className="text-xs tracking-widest" style={{ color: 'var(--gold)', letterSpacing: '0.12em' }}>{config.brand_subtitle || 'MAHABHARATA · RAMAYANA · WORN'}</p>
               </div>
             </div>
             <p className="text-xs leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
-              A legacy of finest silk and traditional sarees, crafted with generations of expertise. Pure Silk. Timeless Tradition. Royal Elegance.
+              Premium mythology-print t-shirts celebrating the warriors of the Mahabharata and Ramayana. Wear the Epics.
             </p>
             {/* Contact */}
             <div className="space-y-2">

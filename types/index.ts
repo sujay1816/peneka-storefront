@@ -1,4 +1,5 @@
-export interface ProductVariant { id:string; colour:string; colourHex:string; stock:number; sku:string; imageUrl?:string|null; }
+export type Size = 'S'|'M'|'L'|'XL'|'XXL';
+export interface ProductVariant { id:string; size:Size; colour:string; colourHex:string; stock:number; sku:string; imageUrl?:string|null; }
 export interface ProductImage { id:string; url:string; publicId:string; altText:string; isPrimary:boolean; order:number; }
 export interface Product {
   id:string; name:string; slug:string; description:string; fabric:string; weaveType:string; originRegion:string;
@@ -13,13 +14,13 @@ export interface Product {
 }
 export interface CartItem {
   productId:string; productName:string; productSlug:string; productImage:string;
-  colour:string; colourHex:string; originalPrice:number; salePrice:number|null;
+  colour:string; colourHex:string; size:Size; originalPrice:number; salePrice:number|null;
   quantity:number; stock:number; gstRate:number;
 }
 export type OrderStatus='confirmed'|'shipped'|'delivered'|'cancelled'|'return_requested'|'return_approved'|'return_rejected'|'refunded';
 export type PaymentMethod='cod'|'upi'|'razorpay';
 export type PaymentStatus='pending'|'paid'|'failed'|'refunded';
-export interface OrderItem { id:string; productId:string; productName:string; productImage:string; colour:string; quantity:number; originalPrice:number; salePrice:number|null; gstRate:number; gstAmount:number; total:number; }
+export interface OrderItem { id:string; productId:string; productName:string; productImage:string; colour:string; size:Size; quantity:number; originalPrice:number; salePrice:number|null; gstRate:number; gstAmount:number; total:number; }
 export interface Order {
   id:string; orderNumber:string; userId:string; addressSnapshot:Address; paymentMethod:PaymentMethod;
   paymentStatus:PaymentStatus; razorpayOrderId:string|null; razorpayPaymentId:string|null;
