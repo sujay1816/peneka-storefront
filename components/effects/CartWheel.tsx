@@ -60,10 +60,10 @@ export default function CartWheel({ style }: { style?: React.CSSProperties }) {
 
       {/* hub */}
       <circle cx="200" cy="200" r="36" fill="none" stroke="url(#cw-rim)" strokeWidth="8" />
-      <circle cx="200" cy="200" r="34" fill="#0E0A08" opacity="0.5" />
+      <circle cx="200" cy="200" r="34" fill="#070708" opacity="0.5" />
       {/* center bolt */}
       <circle cx="200" cy="200" r="11" fill="url(#cw-rim)" />
-      <circle cx="200" cy="200" r="4" fill="#0E0A08" opacity="0.6" />
+      <circle cx="200" cy="200" r="4" fill="#070708" opacity="0.6" />
     </svg>
   )
 }

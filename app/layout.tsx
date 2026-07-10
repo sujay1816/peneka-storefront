@@ -82,8 +82,8 @@ export async function generateMetadata(): Promise<Metadata> {
 const DEFAULT_BRAND = {
   color_primary: '#C1442F',
   color_accent: '#DDA119',
-  color_background: '#1B140D',
-  color_page_bg: '#0E0A08',
+  color_background: '#131315',
+  color_page_bg: '#070708',
   font_heading: 'Cinzel',
   font_body: 'Karla',
   logo_url: '',
@@ -125,18 +125,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       --gold: ${brand.color_accent || '#DDA119'};
       --gold-dark: ${adjustColor(brand.color_accent || '#DDA119', -20)};
       --gold-light: ${adjustColor(brand.color_accent || '#DDA119', 15)};
-      --cream: ${brand.color_background || '#1B140D'};
-      --cream-dark: ${adjustColor(brand.color_background || '#1B140D', -10)};
-      --ivory: ${brand.color_page_bg || '#0E0A08'};
+      --cream: ${brand.color_background || '#131315'};
+      --cream-dark: ${adjustColor(brand.color_background || '#131315', -8)};
+      --ivory: ${brand.color_page_bg || '#070708'};
       --font-heading: '${brand.font_heading}', serif;
       --font-body: '${brand.font_body}', sans-serif;
       --font-voice: 'Cormorant Garamond', serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --ink: #F1E3C6;
+      --ink: #ECE9E2;
       --verdigris: #5C6E3F;
-      --text-primary: #F1E3C6;
-      --text-secondary: #9C8F73;
-      --border: rgba(221,161,25,.16);
+      --text-primary: #ECE9E2;
+      --text-secondary: #8B8880;
+      --border: rgba(221,161,25,.13);
+      --border-strong: rgba(221,161,25,.28);
     }
   `
 
