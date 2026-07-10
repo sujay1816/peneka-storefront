@@ -2,8 +2,8 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import EmberField from '@/components/effects/EmberField'
-import KingdomVista from '@/components/effects/KingdomVista'
 import FireButton from '@/components/effects/FireButton'
+import CartWheel from '@/components/effects/CartWheel'
 import type { SiteConfig, Category, Product, Banner } from '@/types'
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } } }
@@ -58,7 +58,7 @@ export default function HomepageClient({ config, categories, featured, bestselle
 
       {/* ================= ACT I — HERO ================= */}
       <section style={{ position: 'relative', zIndex: 1, overflow: 'hidden', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 28px 80px' }}>
-        <KingdomVista />
+        <CartWheel style={{ opacity: 0.14, zIndex: 0, animation: 'wheelSpin 100s linear infinite' }} />
         <motion.div initial="hidden" animate="visible" variants={stagger} style={{ position: 'relative', zIndex: 2, maxWidth: 780 }}>
           <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
             [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>

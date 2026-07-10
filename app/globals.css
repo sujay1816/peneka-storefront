@@ -809,3 +809,12 @@ video {
   72%, 92%  { opacity: 1; }
   96%, 100% { opacity: 0; }
 }
+
+/* Slow ambient rotation for the hero's background cart wheel */
+@keyframes wheelSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-cycle-en, .brand-cycle-dev { animation: none !important; }
+}
