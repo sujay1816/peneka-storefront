@@ -136,7 +136,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
   return (
     <div className="relative cursor-pointer product-card-wrapper">
       <Link href={`/product/${product.slug}`} onClick={handleProductTap} prefetch={false}>
-        <div className="bg-white overflow-hidden relative group product-card-inner"
+        <div className="bg-[var(--cream)] overflow-hidden relative group product-card-inner"
           style={{ border: '1px solid var(--border)', borderRadius: 4 }}>
 
           {/* Image area */}
@@ -211,7 +211,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
             <div className="absolute top-2 right-2 flex flex-col gap-2 z-10">
               <button
                 type="button"
-                className="w-9 h-9 md:w-8 md:h-8 bg-white flex items-center justify-center shadow-sm transition-all md:opacity-0 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+                className="w-9 h-9 md:w-8 md:h-8 bg-[var(--cream)] flex items-center justify-center shadow-sm transition-all md:opacity-0 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
                 style={{ border: '1px solid var(--border)', opacity: wishlistLoading ? 0.5 : 1, cursor: wishlistLoading ? 'not-allowed' : 'pointer' }}
                 onClick={handleWishlist}
                 onMouseEnter={e => !wishlistLoading && ((e.currentTarget as HTMLElement).style.borderColor = 'var(--crimson)')}
@@ -227,7 +227,7 @@ export default function ProductCard({ product, userId, index = 99 }: { product: 
                 aria-label={isInCompare ? 'Remove from comparison' : compareMaxed ? 'Max 3 products' : 'Add to comparison'}
                 title={isInCompare ? 'Remove from comparison' : compareMaxed ? 'Max 3 products for comparison' : 'Compare'}
                 disabled={compareMaxed}
-                className="w-9 h-9 md:w-8 md:h-8 bg-white flex items-center justify-center shadow-sm transition-all md:opacity-0 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+                className="w-9 h-9 md:w-8 md:h-8 bg-[var(--cream)] flex items-center justify-center shadow-sm transition-all md:opacity-0 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
                 style={{ border: `1px solid ${isInCompare ? 'var(--crimson)' : 'var(--border)'}`, opacity: compareMaxed ? 0.4 : 1, cursor: compareMaxed ? 'not-allowed' : 'pointer' }}
                 onClick={e => { e.preventDefault(); e.stopPropagation(); isInCompare ? removeFromCompare(product.id) : addToCompare(product) }}
                 onMouseEnter={e => !compareMaxed && ((e.currentTarget as HTMLElement).style.borderColor = 'var(--crimson)')}

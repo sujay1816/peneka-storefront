@@ -4,7 +4,7 @@ export default function OrdersLoading() {
       <div className="skeleton h-8 w-40 rounded mb-6" />
       <div className="space-y-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="p-4 bg-white space-y-3" style={{ border: '1px solid var(--border)' }}>
+          <div key={i} className="p-4 bg-[var(--cream)] space-y-3" style={{ border: '1px solid var(--border)' }}>
             <div className="flex justify-between">
               <div className="skeleton h-4 w-32 rounded" />
               <div className="skeleton h-5 w-20 rounded" />

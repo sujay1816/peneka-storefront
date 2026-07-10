@@ -122,7 +122,7 @@ export default function SearchBar({ onClose }: { onClose: () => void }) {
         />
         {query && (
           <button type="button" onClick={() => { setQuery(''); setResults([]); inputRef.current?.focus() }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-gray-100"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-[rgba(255,255,255,0.08)]"
             aria-label="Clear search">
             <X size={14} style={{ color: 'var(--text-secondary)' }} />
           </button>
@@ -130,7 +130,7 @@ export default function SearchBar({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Dropdown */}
-      <div className="absolute top-full left-0 right-0 mt-1 bg-white border shadow-xl overflow-hidden z-50"
+      <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--cream)] border shadow-xl overflow-hidden z-50"
         style={{ borderColor: 'var(--border)', borderRadius: 12, maxHeight: '70vh', overflowY: 'auto' }}>
 
         {/* Suggestions when empty */}

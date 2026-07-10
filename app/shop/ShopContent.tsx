@@ -21,7 +21,7 @@ const SORT_OPTIONS = [
 const PAGE_SIZE = 16
 
 const SkeletonCard = () => (
-  <div className="bg-white overflow-hidden" style={{ border: '1px solid var(--border)', borderRadius: 4 }}>
+  <div className="bg-[var(--cream)] overflow-hidden" style={{ border: '1px solid var(--border)', borderRadius: 4 }}>
     <div className="skeleton" style={{ aspectRatio: '3/4' }} />
     <div className="p-3 space-y-2">
       <div className="skeleton h-3 w-1/2 rounded" />
@@ -583,7 +583,7 @@ export default function ShopContent({ products, categories, config, userId: serv
             />
             {/* Bottom sheet — CSS slide-up */}
             <div
-              className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white filter-drawer-css"
+              className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-[var(--cream)] filter-drawer-css"
               style={{ borderRadius: '16px 16px 0 0', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
               {/* Handle */}
               <div className="flex items-center justify-center pt-3 pb-2 flex-shrink-0">

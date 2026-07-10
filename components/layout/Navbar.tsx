@@ -128,7 +128,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
       <motion.header
         animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="sticky top-0 z-50 bg-white border-b transition-shadow duration-300"
+        className="sticky top-0 z-50 bg-[var(--cream)] border-b transition-shadow duration-300"
         style={{ borderColor: 'var(--border)', boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.08)' : 'none' }}>
         <div className="page-container">
           <div className="flex items-center justify-between h-14 md:h-16 gap-2 md:gap-4">
@@ -217,7 +217,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 bg-white border shadow-2xl z-50 overflow-hidden"
+                      className="absolute right-0 top-full mt-2 bg-[var(--cream)] border shadow-2xl z-50 overflow-hidden"
                       style={{ borderColor: 'var(--border)', borderRadius: 12, width: 240 }}>
                       {user ? (
                         <>
@@ -319,7 +319,7 @@ export default function Navbar({ categories, config, user: serverUser }: NavbarP
               className="fixed inset-0 z-50 bg-black/50" onClick={() => setMenuOpen(false)} />
             <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed left-0 top-0 bottom-0 z-50 w-80 flex flex-col bg-white">
+              className="fixed left-0 top-0 bottom-0 z-50 w-80 flex flex-col bg-[var(--cream)]">
               <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--border)', background: 'var(--cream)' }}>
                 <div className="flex items-center gap-3">
                   <Image src={config.logo_url || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23C1442F'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-family='serif'%3EP%3C/text%3E%3C/svg%3E"} alt={config.brand_name || "Pinaka"} width={36} height={36} sizes="36px" className="object-contain" />

@@ -92,7 +92,7 @@ export default function OrdersPage() {
               placeholder="Search by order number or product..." className="input-base pl-9 pr-8 w-full" style={{ height: 40 }} />
             {search && (
               <button type="button" onClick={() => setSearch('')} aria-label="Clear search"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-100"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-[rgba(255,255,255,0.08)]"
                 style={{ color: 'var(--text-secondary)' }}>
                 <X size={14} />
               </button>

@@ -637,7 +637,7 @@ export default function ProductDetailClient({ product, reviews, relatedProducts,
                       </div>
                     )}
                     {v.stock === 0 && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white/60">
+                      <div className="absolute inset-0 flex items-center justify-center bg-[var(--cream)]/60">
                         <span className="text-xs font-medium" style={{ color: 'var(--crimson)', fontSize: 8 }}>Out</span>
                       </div>
                     )}

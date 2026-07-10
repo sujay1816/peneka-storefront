@@ -5,7 +5,7 @@ export default function CartLoading() {
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex gap-4 p-4 bg-white" style={{ border: '1px solid var(--border)' }}>
+            <div key={i} className="flex gap-4 p-4 bg-[var(--cream)]" style={{ border: '1px solid var(--border)' }}>
               <div className="skeleton rounded" style={{ width: 80, height: 100, flexShrink: 0 }} />
               <div className="flex-1 space-y-2">
                 <div className="skeleton h-4 w-3/4 rounded" />

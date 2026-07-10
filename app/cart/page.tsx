@@ -128,7 +128,7 @@ export default function CartPage() {
         {subtotal < freeShippingThreshold && (
           <div className="mb-6 p-3 text-xs text-center border" style={{ borderColor: 'var(--gold)', background: 'var(--cream)', color: 'var(--text-secondary)' }}>
             Add <span className="font-semibold" style={{ color: 'var(--crimson)' }}>{formatPrice(freeShippingThreshold - subtotal)}</span> more for free shipping!
-            <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div className="mt-2 h-1 bg-[rgba(255,255,255,0.08)] rounded-full overflow-hidden">
               <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (subtotal / freeShippingThreshold) * 100)}%`, background: 'var(--crimson)' }} />
             </div>
           </div>
