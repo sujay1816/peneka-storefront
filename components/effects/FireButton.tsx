@@ -29,6 +29,12 @@ export default function FireButton({
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Skip the particle animation for users who've requested reduced motion —
+    // the button's static gold bevel/glow styling still applies either way.
+    const prefersReducedMotion = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
     let w = 0, h = 0
     const dpr = window.devicePixelRatio || 1
     function size() {

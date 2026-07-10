@@ -63,13 +63,13 @@ export default function HomepageClient({ config, categories, featured, bestselle
           <motion.span variants={fadeUp} className="actlabel" style={{ marginBottom: 36 }}>
             [ ACT.I ] &nbsp;::&nbsp; THE_FIRST_ARROW &nbsp;::&nbsp; <b style={{ color: 'var(--text-secondary)', fontWeight: 400 }}>3000 BCE &rarr; NOW</b>
           </motion.span>
-          <div className="brand-strike-wrap brand-cycle-wrap" style={{ width: '100%' }}>
-            <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-en" style={{
+          <div className="brand-strike-wrap brand-cycle-wrap" role="heading" aria-level={1} aria-label={brandName} style={{ width: '100%' }}>
+            <motion.h1 variants={fadeUp} aria-hidden="true" className="brand-strike-text brand-cycle-en" style={{
               fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 96, lineHeight: 1, letterSpacing: '.02em', margin: 0,
               background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
               WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
             }}>{brandName.toUpperCase()}</motion.h1>
-            <motion.h1 variants={fadeUp} className="brand-strike-text brand-cycle-dev" style={{
+            <motion.h1 variants={fadeUp} aria-hidden="true" className="brand-strike-text brand-cycle-dev" style={{
               fontFamily: "'Tiro Devanagari Sanskrit', serif", fontWeight: 400, fontSize: 90, lineHeight: 1, letterSpacing: '.02em', margin: 0,
               background: 'linear-gradient(180deg, var(--gold-light), var(--gold) 55%, var(--gold-dark))',
               WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',

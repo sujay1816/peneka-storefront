@@ -790,9 +790,11 @@ video {
   white-space: nowrap;
 }
 .brand-cycle-en {
+  opacity: 1;
   animation: brandFlash 7s ease-in-out infinite, cycleEn 10s ease-in-out infinite;
 }
 .brand-cycle-dev {
+  opacity: 0;
   animation: brandFlash 7s ease-in-out infinite, cycleDev 10s ease-in-out infinite;
 }
 @media (max-width: 720px) {
@@ -814,7 +816,4 @@ video {
 @keyframes wheelSpin {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to   { transform: translate(-50%, -50%) rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .brand-cycle-en, .brand-cycle-dev { animation: none !important; }
 }

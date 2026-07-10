@@ -14,6 +14,13 @@ export default function EmberField() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Respect the user's reduced-motion preference — this is a pure JS
+    // requestAnimationFrame loop, so the CSS-level reduced-motion rules
+    // elsewhere in the site can't reach it; skip the animation entirely.
+    const prefersReducedMotion = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
     let vw = 0, vh = 0
     const dpr = window.devicePixelRatio || 1
 
